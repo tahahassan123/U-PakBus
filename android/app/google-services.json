@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1063686198436",
+    "project_id": "pakistanbusapp",
+    "storage_bucket": "pakistanbusapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063686198436:android:5ff7847c5b0ed485844231",
+        "android_client_info": {
+          "package_name": "com.example.pakistanbusapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063686198436-mbg63ejqr21d86jc20cb7b6abj2vs8lr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4YOQYgQbGp2Z7buM56PyivcaDmusrh74"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063686198436-mbg63ejqr21d86jc20cb7b6abj2vs8lr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
