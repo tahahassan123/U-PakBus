@@ -45,6 +45,9 @@ flutter_launcher_icons:
   android: true
   ios: true
   image_path: "images/UPakBusFlogo.png"
+  adaptive_icon_background: "images/UPakBusFbackground.png"
+  adaptive_icon_foreground: "images/UPakBusFlogo.png"
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
