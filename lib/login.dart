@@ -7,9 +7,6 @@ void main() {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Container(
-          child: Container(
-              child: Image.asset('images/pp.png')
-          ),
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage('images/login2.jpg'),
