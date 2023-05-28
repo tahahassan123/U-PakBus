@@ -15,8 +15,56 @@ class MyApp extends StatelessWidget{
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage('images/login2.jpg'),
-                  fit: BoxFit.cover,
+              fit: BoxFit.cover,
+              colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.5), BlendMode.dstATop),
             ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              CircleAvatar(
+                backgroundImage: AssetImage('images/pp.png'),
+                radius: 110,
+              ),
+              Padding(padding: const EdgeInsets.all(12),
+                child: TextField(
+                   decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: "Enter your Username",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              Padding(padding: const EdgeInsets.all(12),
+                child: TextField(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: "Enter your CNIC",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              Padding(padding: const EdgeInsets.all(12),
+                child: TextField(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    hintText: "Enter your Password",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              Padding(padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 120),
+                child: MaterialButton(
+                  onPressed: () {},
+                  color: Colors.green,
+                  child: const Text('Log In', style: TextStyle(color: Colors.white)),
+                ),
+              ),
+            ]
           ),
         ),
       ),
