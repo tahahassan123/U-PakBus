@@ -111,8 +111,9 @@ class MyApp extends StatelessWidget{
                       color: Colors.green,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
+                        //clipBehaviour: Clip.antiAliasWithSaveLayer,
                       ),
-                      child: const Text('Log In', style: TextStyle(fontSize: 20, color: Colors.white)),
+                      child: const Text('Log In', style: TextStyle(fontSize: 18, color: Colors.white)),
                     ),
                   ),
                 ]
