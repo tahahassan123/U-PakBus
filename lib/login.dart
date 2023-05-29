@@ -24,11 +24,11 @@ class MyApp extends StatelessWidget{
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               CircleAvatar(
-                backgroundColor: Colors.grey[700],
-                radius: 120,
+                backgroundColor: Colors.green[700],
+                radius: 115,
                 child: CircleAvatar(
-                  backgroundColor: Colors.lightGreen[700],
-                  backgroundImage: AssetImage('images/pp.png'),
+                  backgroundColor: Colors.grey[400],
+                  backgroundImage: AssetImage('images/pp21.png'),
                   radius: 105,
                 ),
               ),
@@ -38,7 +38,9 @@ class MyApp extends StatelessWidget{
                     filled: true,
                     fillColor: Colors.white,
                     hintText: "Enter your Username",
-                    border: OutlineInputBorder(),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30)
+                    ),
                   ),
                 ),
               ),
@@ -48,7 +50,9 @@ class MyApp extends StatelessWidget{
                     filled: true,
                     fillColor: Colors.white,
                     hintText: "Enter your CNIC",
-                    border: OutlineInputBorder(),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30)
+                    ),
                   ),
                 ),
               ),
@@ -58,7 +62,9 @@ class MyApp extends StatelessWidget{
                     filled: true,
                     fillColor: Colors.white,
                     hintText: "Enter your Password",
-                    border: OutlineInputBorder(),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30)
+                    ),
                   ),
                 ),
               ),
@@ -66,7 +72,10 @@ class MyApp extends StatelessWidget{
                 child: MaterialButton(
                   onPressed: () {},
                   color: Colors.green,
-                  child: const Text('Log In', style: TextStyle(color: Colors.white)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: const Text('Log In', style: TextStyle(fontSize: 20, color: Colors.white)),
                 ),
               ),
             ]

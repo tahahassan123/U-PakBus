@@ -13,14 +13,15 @@ class MyApp extends StatelessWidget{
       home: Scaffold(
         body: Container(
           decoration: BoxDecoration(
-            image: DecorationImage(image: AssetImage('images/mainmenu2.jpg'),
+            image: DecorationImage(
+              image: AssetImage('images/drivermainmenu2.jpg'),
               fit: BoxFit.cover,
               colorFilter: new ColorFilter.mode(Colors.greenAccent.withOpacity(0.75), BlendMode.dstATop),
             ),
           ),
         ),
         appBar: AppBar(
-            title: Text('Universal Pak Bus'),
+          title: Text('U-PakBus Driver'),
           backgroundColor: Colors.green[800],
         ),
       ),
