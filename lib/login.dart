@@ -24,8 +24,13 @@ class MyApp extends StatelessWidget{
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               CircleAvatar(
-                backgroundImage: AssetImage('images/pp.png'),
-                radius: 110,
+                backgroundColor: Colors.grey[700],
+                radius: 120,
+                child: CircleAvatar(
+                  backgroundColor: Colors.lightGreen[700],
+                  backgroundImage: AssetImage('images/pp.png'),
+                  radius: 105,
+                ),
               ),
               Padding(padding: const EdgeInsets.all(12),
                 child: TextField(
