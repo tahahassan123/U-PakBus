@@ -2,10 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(Login());
 }
-class MyApp extends StatelessWidget{
-  MyApp({super.key});
+class Login extends StatelessWidget{
+  Login({super.key});
   final oneController = TextEditingController();
   final twoController = TextEditingController();
   final threeController = TextEditingController();
@@ -17,7 +17,6 @@ class MyApp extends StatelessWidget{
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
