@@ -19,7 +19,6 @@ class Background extends StatelessWidget{
         body: Container(decoration: BoxDecoration(
           image: DecorationImage(image: AssetImage('images/mainmenu2.jpg'),
             fit: BoxFit.cover,
-<<<<<<< HEAD
             colorFilter: new ColorFilter.mode(Colors.green.withOpacity(0.3), BlendMode.dstATop),
           ),
         ),
@@ -47,7 +46,6 @@ class Background extends StatelessWidget{
                   ),
                 ),
               ]
-=======
             colorFilter: new ColorFilter.mode(Colors.green.withOpacity(0.1), BlendMode.dstATop),
           ),
         ),
