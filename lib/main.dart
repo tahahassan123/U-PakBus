@@ -19,7 +19,7 @@ class Background extends StatelessWidget{
         body: Container(decoration: BoxDecoration(
           image: DecorationImage(image: AssetImage('images/mainmenu2.jpg'),
             fit: BoxFit.cover,
-            colorFilter: new ColorFilter.mode(Colors.green.withOpacity(0.8), BlendMode.dstATop),
+            colorFilter: new ColorFilter.mode(Colors.green.withOpacity(0.1), BlendMode.dstATop),
           ),
         ),
 
@@ -66,10 +66,14 @@ class _MainMenuState extends State<MainMenu> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            DropdownButton<String>(
+            Positioned(
+              bottom: 20,
+              left: 20,
+              child: DropdownButton<String>(
               items: items.map(buildMenuItem).toList(),
               onChanged: (value) => setState(() => this.value = value),
             ),
+            )
 
           ]
       ),
