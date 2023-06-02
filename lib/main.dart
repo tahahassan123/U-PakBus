@@ -30,16 +30,6 @@ class Background extends StatelessWidget{
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Container(
-                //child: InkWell(
-                //  onTap: () {},
-                //  child: Ink.image(
-                //splashColor: Colors.black26,
-                //    image: AssetImage('images/button.png'),
-                //     height: 100,
-                //    width: 100,
-                //    fit: BoxFit.cover,
-                //),
-                // ),
                 child: GestureDetector(
                   onTap: () {
                     debugPrint('The image button has been tapped');
