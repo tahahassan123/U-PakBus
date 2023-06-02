@@ -17,37 +17,27 @@ class Background extends StatelessWidget{
           backgroundColor: Colors.green[800],
         ),
         body: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage('images/mainmenu2.jpg'),
-                fit: BoxFit.cover,
-                colorFilter: new ColorFilter.mode(
-                    Colors.green.withOpacity(0.3), BlendMode.dstATop),
-              ),
+          decoration: BoxDecoration(
+            image: DecorationImage(image: AssetImage('images/mainmenu2.jpg'),
+              fit: BoxFit.cover,
+              colorFilter: new ColorFilter.mode(
+                  Colors.green.withOpacity(0.3), BlendMode.dstATop),
             ),
+          ),
 
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  Container(
-                    //child: InkWell(
-                    //  onTap: () {},
-                    //  child: Ink.image(
-                    //splashColor: Colors.black26,
-                    //    image: AssetImage('images/button.png'),
-                    //     height: 100,
-                    //    width: 100,
-                    //    fit: BoxFit.cover,
-                    //),
-                    // ),
-                    child: GestureDetector(
-                      onTap: () {
-                        debugPrint('The image button has been tapped');
-                      },
-                      child: Image.asset('images/button.png'),
-                    ),
-                  ),
-                ],
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Container(
+                child: GestureDetector(
+                  onTap: () {
+                    debugPrint('The image button has been tapped');
+                  },
+                  child: Image.asset('images/button.png'),
+                ),
+              ),
+            ],
           ),
         ),
       ),
