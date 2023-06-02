@@ -100,6 +100,7 @@ class Login extends StatelessWidget{
                         ),
                       ),
                     ),
+<<<<<<< HEAD
                     Padding(padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 120),
                       child: MaterialButton(
                         onPressed: () {
@@ -114,6 +115,22 @@ class Login extends StatelessWidget{
                         ),
                         child: const Text('Log In', style: TextStyle(fontSize: 18, color: Colors.white)),
                       ),
+=======
+                  ),
+                  Padding(padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 120),
+                    child: MaterialButton(
+                      onPressed: () {
+                        email = oneController.text;
+                        cnic = twoController.text;
+                        password = threeController.text;
+                      },
+                      color: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        //clipBehaviour: Clip.antiAliasWithSaveLayer,
+                      ),
+                      child: const Text('Log In', style: TextStyle(fontSize: 18, color: Colors.white)),
+>>>>>>> master
                     ),
                   ]
               ),
