@@ -6,9 +6,10 @@ import 'package:pakistanbusapp/main.dart';
 
 import 'mainDriver.dart';
 
-void main() {
-  runApp(Login());
-}
+void main() => runApp(MaterialApp(
+  title: "App",
+  home: Login(),
+));
 class Login extends StatelessWidget{
   Login({super.key});
   final oneController = TextEditingController();
@@ -19,9 +20,12 @@ class Login extends StatelessWidget{
   String password = '';
   @override
   Widget build(BuildContext context){
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
+        appBar: AppBar(
+        centerTitle: true,
+        title: Text('Title'),),
+
+
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -121,6 +125,7 @@ class Login extends StatelessWidget{
 
 
                           try {
+                            FirebaseAuth.instance.signOut();
                             FirebaseAuth auth = FirebaseAuth.instance;
                             UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
                                 email: email,
@@ -146,7 +151,7 @@ class Login extends StatelessWidget{
                                    print("successful authentication");
                                    String type=snapshot.get("type").toString();
                                    if(type=="driver"){
-                                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => Driver()));
+                                     Navigator.of(context).push(MaterialPageRoute( builder: (context) => Driver(),));
                                  }
                                    else{
                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Background()));
@@ -194,9 +199,10 @@ class Login extends StatelessWidget{
             ),
           ),
         ),
-      ),
-    );
+      );
+
   }
 }
 
 class DefaultFirebaseOptions {
+}
