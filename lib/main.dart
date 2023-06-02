@@ -73,7 +73,6 @@ class Background extends StatelessWidget{
                 ),
               ),
             ]
->>>>>>> master
           ),
         ),
       ),
