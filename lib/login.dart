@@ -1,9 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pakistanbusapp/main.dart';
 
-void main() {
-  runApp(Login());
-}
+import 'mainDriver.dart';
+
+void main() => runApp(MaterialApp(
+  title: "App",
+  home: Login(),
+));
 class Login extends StatelessWidget{
   Login({super.key});
   final oneController = TextEditingController();
@@ -14,9 +20,12 @@ class Login extends StatelessWidget{
   String password = '';
   @override
   Widget build(BuildContext context){
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
+        appBar: AppBar(
+        centerTitle: true,
+        title: Text('Title'),),
+
+
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -85,6 +94,7 @@ class Login extends StatelessWidget{
                       child: TextField(
                         controller: threeController,
                         decoration: InputDecoration(
+
                           filled: true,
                           fillColor: Colors.white,
                           hintText: "Enter your Password",
@@ -102,10 +112,79 @@ class Login extends StatelessWidget{
                     ),
                     Padding(padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 120),
                       child: MaterialButton(
-                        onPressed: () {
+                        onPressed: () async {
                           email = oneController.text;
                           cnic = twoController.text;
                           password = threeController.text;
+                          String cnicfromdb;
+
+                          WidgetsFlutterBinding.ensureInitialized();
+                          await Firebase.initializeApp(
+                              );
+
+
+
+                          try {
+                            FirebaseAuth.instance.signOut();
+                            FirebaseAuth auth = FirebaseAuth.instance;
+                            UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                                email: email,
+                                password: password
+                            );
+
+                            FirebaseAuth.instance
+                                .authStateChanges()
+                                .listen((User? user) async {
+                              if (user == null) {
+                                print('User is currently signed out!');
+                              } else {
+                                print('User is signed in!');
+                                DocumentSnapshot snapshot;
+                                final data = await FirebaseFirestore.instance
+                                    .collection("users")
+                                    .doc(email)
+                                    .get();
+                                snapshot = data;
+                               cnicfromdb=snapshot.get("cnic").toString();
+                               if(cnic==cnicfromdb)
+                                 {
+                                   print("successful authentication");
+                                   String type=snapshot.get("type").toString();
+                                   if(type=="driver"){
+                                     Navigator.of(context).push(MaterialPageRoute( builder: (context) => Driver(),));
+                                 }
+                                   else{
+                                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => Background()));
+                                   }
+                                 }
+                               else
+                                 {
+                                   print("cnic does not match with login credentials");
+                                   FirebaseAuth.instance.signOut();
+
+                                 }
+
+
+
+
+
+                              }
+                            });
+
+
+                          } on FirebaseAuthException catch (e) {
+                            if (e.code == 'user-not-found') {
+                              print('No user found for that email.');
+                            } else if (e.code == 'wrong-password') {
+                              print('Wrong password provided for that user.');
+                            }
+
+                            else
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text("Sending Message"),
+                              ));
+
+                          }
                         },
                         color: Colors.green,
                         shape: RoundedRectangleBorder(
@@ -120,7 +199,10 @@ class Login extends StatelessWidget{
             ),
           ),
         ),
-      ),
-    );
+      );
+
   }
+}
+
+class DefaultFirebaseOptions {
 }
