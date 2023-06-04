@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -7,13 +9,19 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 
 
 class HomeScreen extends StatefulWidget {
+
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
+
 }
 
+var data;
+
 class _HomeScreenState extends State<HomeScreen> {
+  late String bus;
+
 
   Map<String, dynamic>? paymentIntent;
 
@@ -24,19 +32,23 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text('Stripe Payment'),
       ),
       body: Center(
-        child: TextButton(
-          child: const Text('Make Payment'),
-          onPressed: () async {
-            await makePayment();
-          },
+        child:Column(
+
+          children: [
+            ElevatedButton(onPressed: () { bus="GREENLINE";makePayment(); }, child: Text("GREENLINE"),),
+            ElevatedButton(onPressed: () { bus="PEOPLE BUS";makePayment(); }, child: Text("PEOPLE BUS"),),
+            ElevatedButton(onPressed: (){}, child: Text("VIEW YOUR TICKETS"))
+
+          ],
+
         ),
-      ),
+      )
     );
   }
 
   Future<void> makePayment() async {
     try {
-      paymentIntent = await createPaymentIntent('10', 'USD');
+      paymentIntent = await createPaymentIntent('200', 'PKR');
       //Payment Sheet
       await Stripe.instance.initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
@@ -48,16 +60,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
       ///now finally display payment sheeet
+      ///
+
+
+
       displayPaymentSheet();
     } catch (e, s) {
       print('exception:$e$s');
     }
   }
 
-  displayPaymentSheet() async {
+   displayPaymentSheet() async {
     try {
       await Stripe.instance.presentPaymentSheet(
-      ).then((value) {
+      ).then((value) async {
         showDialog(
             context: context,
             builder: (_) =>
@@ -77,6 +93,23 @@ class _HomeScreenState extends State<HomeScreen> {
         // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("paid successfully")));
 
         paymentIntent = null;
+
+
+
+        WidgetsFlutterBinding.ensureInitialized();
+         await Firebase.initializeApp(
+        );
+
+
+        String id=data["id"];
+        var amount2=data["amount"]/100;
+        //
+
+
+        final db = FirebaseFirestore.instance;
+        final data2 = {"id":id,"name": "-", "date": FieldValue.serverTimestamp(),"email":"-","amount":amount2,"service":bus};
+        db.collection("tickets").doc("1").set(data2);
+
       }).onError((error, stackTrace) {
         print('Error is:--->$error $stackTrace');
       });
@@ -110,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         body: body,
       );
-      // ignore: avoid_print
+      data=jsonDecode(response.body);
       print('Payment Intent Body->>> ${response.body.toString()}');
       return jsonDecode(response.body);
     } catch (err) {
@@ -124,4 +157,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return calculatedAmout.toString();
   }
 
+
+
+
 }
+
+
+
+
