@@ -18,6 +18,9 @@ class Login extends StatelessWidget{
   String email = '';
   String cnic = '';
   String password = '';
+  bool doc1=false,doc2=false;
+  String cnicfromdb=" ",servicefromdb=" ",namefromdb=" ";
+
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -113,10 +116,15 @@ class Login extends StatelessWidget{
                     Padding(padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 120),
                       child: MaterialButton(
                         onPressed: () async {
+                          doc1=false;
+                          doc2=false;
+                          cnicfromdb = " ";
+                          namefromdb=" ";
+                          servicefromdb=" ";
                           email = oneController.text;
                           cnic = twoController.text;
                           password = threeController.text;
-                          String cnicfromdb;
+
 
                           WidgetsFlutterBinding.ensureInitialized();
                           await Firebase.initializeApp(
@@ -140,20 +148,80 @@ class Login extends StatelessWidget{
                               } else {
                                 print('User is signed in!');
                                 DocumentSnapshot snapshot;
-                                final data = await FirebaseFirestore.instance
-                                    .collection("users")
-                                    .doc(email)
-                                    .get();
-                                snapshot = data;
-                               cnicfromdb=snapshot.get("cnic").toString();
+
+                                try {
+                                  var collectionRef = FirebaseFirestore.instance.collection('normalusers');
+                                  await collectionRef.doc(email).get().then((doc) {
+                                    doc1 = doc.exists;
+
+                                  });
+
+
+
+                                }
+
+                                catch(e)
+                              {
+
+                              }
+
+                              try {
+                                var collectionRef = FirebaseFirestore.instance.collection('drivers');
+                                await collectionRef.doc(email).get().then((doc) {
+                                  doc2 = doc.exists;
+                                });
+                              }
+
+                              catch(e)
+                              {
+
+                              }
+
+                              if(doc1)
+                                {
+                                  final data = await FirebaseFirestore.instance
+                                      .collection("normalusers")
+                                      .doc(email)
+                                      .get();
+                                  snapshot = data;
+                                  cnicfromdb=snapshot.get("cnic").toString();
+                                  namefromdb=snapshot.get("name").toString();
+                                }
+
+                                else if(doc2)
+                                {
+                                  final data = await FirebaseFirestore.instance
+                                      .collection("drivers")
+                                      .doc(email)
+                                      .get();
+                                  snapshot = data;
+                                  cnicfromdb=snapshot.get("cnic").toString();
+                                  namefromdb=snapshot.get("name").toString();
+                                  servicefromdb=snapshot.get("service").toString();
+                                }
+
+                                else {
+                                cnicfromdb = " ";
+                                namefromdb=" ";
+                                servicefromdb=" ";
+
+                              }
+
+
+
+
+
+
                                if(cnic==cnicfromdb)
                                  {
                                    print("successful authentication");
-                                   String type=snapshot.get("type").toString();
-                                   if(type=="driver"){
+
+                                   if(doc2){
+                                     print("cnic: "+cnicfromdb+" name: "+namefromdb+" service: "+servicefromdb+" email: "+email);
                                      Navigator.of(context).push(MaterialPageRoute( builder: (context) => Driver(),));
                                  }
-                                   else{
+                                   else if(doc1){
+                                     print("cnic: "+cnicfromdb+" name: "+namefromdb+" service: "+servicefromdb+" email: "+email);
                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Background()));
                                    }
                                  }
