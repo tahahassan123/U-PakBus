@@ -20,12 +20,9 @@ class Login extends StatelessWidget{
   String password = '';
   @override
   Widget build(BuildContext context){
-    return Scaffold(
-        appBar: AppBar(
-        centerTitle: true,
-        title: Text('Title'),),
-
-
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -199,7 +196,8 @@ class Login extends StatelessWidget{
             ),
           ),
         ),
-      );
+      ),
+    );
 
   }
 }
