@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +13,7 @@ class MainMenu extends StatefulWidget {
 }
 class _MainMenuState extends State<MainMenu> {
   String selectedService="Select Service";
-  var service={'Select Service': 0,'Peoples Bus': 1, 'EV Bus': 2,'Greenline Metro': 3};
+  final service={'Select Service': 0,'Peoples Bus': 1, 'EV Bus': 2,'Greenline Metro': 3};
   List Service=[];
   ServiceDropDown(){
     service.forEach((key, value) {
@@ -19,7 +21,7 @@ class _MainMenuState extends State<MainMenu> {
     });
   }
   String selectedBus="Select Bus";
-  var bus={'Select Bus': 0, 'R-1': 1, 'R-2': 1,'R-3': 1, 'R-4': 1};
+  final bus={'Select Bus': 0, 'R-1': 1, 'R-2': 1,'R-3': 1, 'R-4': 1};
   List Bus=[];
   BusDropDown(serviceID){
     bus.forEach((key, value) {
@@ -29,8 +31,8 @@ class _MainMenuState extends State<MainMenu> {
     });
     selectedBus= Bus[0];
   }
-  String selectedPickup="Select Pickup location";
-  var pickup={'Select Pickup location': 'Select Bus',
+  String selectedPickup="";
+  final pickup={
     'Model Mor': 'R-1', 'Malir Halt': 'R-1', 'Colony Gate': 'R-1', 'Nata Khan Bridge': 'R-1', 'Drigh Road Station': 'R-1', 'PAF Base Faisal': 'R-1', 'Laal Kothi': 'R-1', 'Karsaz': 'R-1', 'Nursery': 'R-1', 'FTC': 'R-1', 'Regent Plaza': 'R-1', 'Metropole': 'R-1', 'Fawwara Chowk': 'R-1', 'Arts Council': 'R-1', 'Shaheen Complex': 'R-1', 'I.I.Chundrigar': 'R-1', 'Tower': 'R-1', 'Fisheries': 'R-1','Dockyard': 'R-1',
     'Nagan Chowrangi' : 'R-2', 'Shafiq Morr' : 'R-2', 'Sohrab Goth' : 'R-2', 'Gulshan Chowranei' : 'R-2', 'NIPA': 'R-2', 'Johar Morr': 'R-2', 'COD': 'R-2', 'Drigh Road Station': 'R-2', 'Colony Gate': 'R-2', 'Shah Faisal Colony': 'R-2', 'Singer Chowrangi': 'R-2', 'Landhi Road': 'R-2'
   };
@@ -42,6 +44,20 @@ class _MainMenuState extends State<MainMenu> {
       }
     });
     selectedPickup= Pickup[0];
+  }
+  String selectedDestination="";
+  final destination={
+  'Nagan Chowrangi' : 'R-2', 'Shafiq Morr' : 'R-2', 'Sohrab Goth' : 'R-2', 'Gulshan Chowranei' : 'R-2', 'NIPA': 'R-2', 'Johar Morr': 'R-2', 'COD': 'R-2', 'Drigh Road Station': 'R-2', 'Colony Gate': 'R-2', 'Shah Faisal Colony': 'R-2', 'Singer Chowrangi': 'R-2', 'Landhi Road': 'R-2',
+  'Model Mor': 'R-1', 'Malir Halt': 'R-1', 'Colony Gate': 'R-1', 'Nata Khan Bridge': 'R-1', 'Drigh Road Station': 'R-1', 'PAF Base Faisal': 'R-1', 'Laal Kothi': 'R-1', 'Karsaz': 'R-1', 'Nursery': 'R-1', 'FTC': 'R-1', 'Regent Plaza': 'R-1', 'Metropole': 'R-1', 'Fawwara Chowk': 'R-1', 'Arts Council': 'R-1', 'Shaheen Complex': 'R-1', 'I.I.Chundrigar': 'R-1', 'Tower': 'R-1', 'Fisheries': 'R-1','Dockyard': 'R-1',
+  };
+  List Destination=[];
+  DestinationDropDown(busNumber2){
+    pickup.forEach((key, value) {
+      if(busNumber2==value){
+        Destination.add(key);
+      }
+    });
+    selectedDestination= Destination[0];
   }
   @override
   void initState() {
@@ -91,6 +107,7 @@ class _MainMenuState extends State<MainMenu> {
                               value: selectedService,
                               onChanged: (newValue){
                                 setState(() {
+                                  Destination=[];
                                   Pickup=[];
                                   Bus=[];
                                   BusDropDown(service[newValue]);
@@ -131,7 +148,9 @@ class _MainMenuState extends State<MainMenu> {
                                 setState(() {
                                   print(newValue);
                                   Pickup=[];
+                                  Destination=[];
                                   PickupDropDown(newValue);
+                                  DestinationDropDown(newValue);
                                   selectedBus="$newValue";
                                 });
                               },
@@ -153,11 +172,11 @@ class _MainMenuState extends State<MainMenu> {
                       Column(
                         children: [
                           Align(
-                              alignment: Alignment.centerLeft,
-                              child:Text("Pickup Location", style: TextStyle(fontWeight:FontWeight.bold,fontSize: 18),)
+                              alignment: Alignment.bottomLeft,
+                              child:Text("Pickup At", style: TextStyle(fontWeight:FontWeight.bold,fontSize: 18),)
                           ),
                           Container(
-                            width: 170,
+                            width: 180,
                             height: 40,
                             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2,),
                             decoration: BoxDecoration(
@@ -165,6 +184,7 @@ class _MainMenuState extends State<MainMenu> {
                                 borderRadius: BorderRadius.circular(20)
                             ),
                             child: DropdownButton(
+                              isExpanded: true,
                               value: selectedPickup,
                               onChanged: (newValue){
                                 setState(() {
@@ -181,6 +201,11 @@ class _MainMenuState extends State<MainMenu> {
                           ),
                         ],
                       ),
+                      SizedBox(
+                        width: 30,
+                        height: 25,
+                        child: Center(child: Text("To", style: TextStyle(fontSize: 15,),)),
+                      ),
                       Column(
                         children: [
                           Align(
@@ -188,7 +213,7 @@ class _MainMenuState extends State<MainMenu> {
                               child:Text("Destination", style: TextStyle(fontWeight:FontWeight.bold,fontSize: 18),)
                           ),
                           Container(
-                            width: 170,
+                            width: 180,
                             height: 40,
                             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2,),
                             decoration: BoxDecoration(
@@ -196,16 +221,17 @@ class _MainMenuState extends State<MainMenu> {
                                 borderRadius: BorderRadius.circular(20)
                             ),
                             child: DropdownButton(
-                              value: selectedPickup,
+                              isExpanded: true,
+                              value: selectedDestination,
                               onChanged: (newValue){
                                 setState(() {
-                                  selectedPickup="$newValue";
+                                  selectedDestination="$newValue";
                                 });
                               },
-                              items:Pickup.map((pickup){
+                              items:Destination.map((destination){
                                 return DropdownMenuItem(
-                                  child: new Text(pickup),
-                                  value:pickup,
+                                  child: new Text(destination),
+                                  value:destination,
                                 );
                               }).toList(),
                             ),
