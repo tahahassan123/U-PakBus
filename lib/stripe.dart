@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:pakistanbusapp/stripe.dart';
-
-import 'mainstripe.dart';
+import 'oldstripe.dart';
+//import 'mainstripe.dart';
 
 
 void main() {

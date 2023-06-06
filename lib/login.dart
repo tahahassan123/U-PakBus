@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pakistanbusapp/main.dart';
 import 'mainDriver.dart';
+import 'mainstripe.dart';
 
-void main() => runApp(MaterialApp(
-  title: "App",
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MaterialApp(
+  title: "LoginPage",
   home: Login(),
-));
+));}
 class Login extends StatelessWidget{
   Login({super.key});
   final oneController = TextEditingController();
@@ -19,7 +23,7 @@ class Login extends StatelessWidget{
   String password = '';
   bool doc1=false,doc2=false;
   String cnicfromdb=" ",servicefromdb=" ",namefromdb=" ";
-
+  //async {}
   @override
   Widget build(BuildContext context){
     return MaterialApp(
@@ -189,10 +193,10 @@ class Login extends StatelessWidget{
                                    if(doc2){
                                      print("cnic: "+cnicfromdb+" name: "+namefromdb+" service: "+servicefromdb+" email: "+email);
                                      Navigator.of(context).push(MaterialPageRoute( builder: (context) => Driver(),));
-                                 }
+                                   }
                                    else if(doc1){
                                      print("cnic: "+cnicfromdb+" name: "+namefromdb+" service: "+servicefromdb+" email: "+email);
-                                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => MainMenu()));
+                                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => MainMenu(),));
                                    }
                                  }
                                else

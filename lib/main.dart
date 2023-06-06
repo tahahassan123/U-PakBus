@@ -2,11 +2,12 @@ import 'dart:ffi';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'stripe.dart';
-import 'mainstripe.dart';
+//import 'mainstripe.dart';
 
-void main() {
-  runApp(MainMenu());
-}
+void main() => runApp(MaterialApp(
+title: "UserPage",
+home: MainMenu(),
+));
 class MainMenu extends StatefulWidget {
   const MainMenu({Key? key}) : super(key: key);
   @override
@@ -15,6 +16,7 @@ class MainMenu extends StatefulWidget {
 class _MainMenuState extends State<MainMenu> {
   final passengerController = TextEditingController();
   var passenger = 0;
+  var error = '';
   String selectedService= 'Select Service';
   String busImage = 'images/UPakBuslogo.png';
   final service={'Select Service': 0,'Peoples Bus': 1, 'EV Bus': 2,'Greenline Metro': 3};
@@ -238,7 +240,7 @@ class _MainMenuState extends State<MainMenu> {
                             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2,),
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.green, width: 4),
-                                borderRadius: BorderRadius.circular(20)
+                                borderRadius: BorderRadius.circular(25)
                             ),
                             child: DropdownButton(
                               isExpanded: true,
@@ -275,7 +277,7 @@ class _MainMenuState extends State<MainMenu> {
                             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2,),
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.green, width: 4),
-                                borderRadius: BorderRadius.circular(20)
+                                borderRadius: BorderRadius.circular(25)
                             ),
                             child: DropdownButton(
                               isExpanded: true,
@@ -327,7 +329,7 @@ class _MainMenuState extends State<MainMenu> {
                         ),
                         border: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.green, width: 4),
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                       ),
                       keyboardType: TextInputType.number,
@@ -335,12 +337,28 @@ class _MainMenuState extends State<MainMenu> {
                   ),
                   Column(
                     children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Center(child: Text(error, style: TextStyle(fontSize: 12, color: Colors.red,),)),
+                      ),
                       GestureDetector(
                         onTap: () {
                           passenger = int.parse(passengerController.text);
                           if (selectedService != null || selectedBus != null || selectedPickup != null || selectedDestination != null || passenger != 0){
                             Navigator.of(context).push(MaterialPageRoute( builder: (context) => HomeScreen(),));
-                          };
+                          }//passenger: passenger
+                          else{
+                            if (selectedPickup == selectedDestination){
+                              error = "";
+                              var snackBar = SnackBar(content: Text('Pickup and destination cannot be same!'));
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            }
+                            else{
+                            error = "Please complete all fields!";
+                            var snackBar = SnackBar(content: Text('Please complete all fields!'));
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            }
+                          }
                         },
                         child: SizedBox(
                           width: 100,
