@@ -2,7 +2,8 @@ import 'dart:ffi';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'stripe.dart';
-//import 'mainstripe.dart';
+//import 'oldstripe.dart';
+import 'mainstripe.dart';
 
 void main() => runApp(MaterialApp(
 title: "UserPage",
@@ -345,7 +346,7 @@ class _MainMenuState extends State<MainMenu> {
                         onTap: () {
                           passenger = int.parse(passengerController.text);
                           if (selectedService != null || selectedBus != null || selectedPickup != null || selectedDestination != null || passenger != 0){
-                            Navigator.of(context).push(MaterialPageRoute( builder: (context) => HomeScreen(),));
+                            Navigator.of(context).push(MaterialPageRoute( builder: (context) => HomeScreen(passenger: passenger,),));
                           }//passenger: passenger
                           else{
                             if (selectedPickup == selectedDestination){
