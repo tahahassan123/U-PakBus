@@ -20,6 +20,9 @@ class MainMenu extends StatefulWidget {
   @override
   _MainMenuState createState() => _MainMenuState();
 }
+
+var data;
+var serviceid;
 class _MainMenuState extends State<MainMenu> {
   Map<String, dynamic>? paymentIntent;
   final passengerController = TextEditingController();
@@ -354,6 +357,7 @@ class _MainMenuState extends State<MainMenu> {
                           passenger = int.parse(passengerController.text);
                           if (selectedService != null || selectedBus != null || selectedPickup != null || selectedDestination != null || passenger != 0){
                             //Navigator.of(context).push(MaterialPageRoute( builder: (context) => HomeScreen2(passenger: passenger,),));
+                           print("passengers "+passenger.toString()+"  pickup loc "+selectedPickup+"  dest loc "+selectedDestination+" selectedbus"+selectedBus+" selectedservice"+selectedService);
                             makePayment();
                           }//passenger: passenger
                           else{
@@ -441,19 +445,24 @@ class _MainMenuState extends State<MainMenu> {
 
 
 
-        WidgetsFlutterBinding.ensureInitialized();
-        await Firebase.initializeApp(
-        );
 
 
-        // String id=data["id"];
-        // var amount2=(data["amount"]/100);
-        //
 
+        var id=data["id"];
+        var amount2=(data["amount"]/100);
+
+
+
+        if(selectedService=="People Bus")
+          serviceid=1;
+        if(selectedService=="EV Bus")
+          serviceid=2;
+        if(selectedService=="Greenline Metro")
+          serviceid=3;
 
         final db = FirebaseFirestore.instance;
-        //final data2 = {"id":id,"name": "-", "passengers":passengers.text,"date": FieldValue.serverTimestamp(),"email":"-","amount":amount2,"service":bus,"pickup":pickup,"destination":destination};
-        //db.collection(bus).doc("1").set(data2);
+        final data2 = {"id":id,"name": "-", "passengers":passenger,"date": FieldValue.serverTimestamp(),"email":"-","amount":amount2,"service":selectedService,"pickup":selectedPickup,"destination":selectedDestination,"serviceid":serviceid.toString()};
+        db.collection("tickets").doc("1").set(data2);
 
       }).onError((error, stackTrace) {
         print('Error is:--->$error $stackTrace');
@@ -493,7 +502,7 @@ class _MainMenuState extends State<MainMenu> {
         },
         body: body,
       );
-     // data=jsonDecode(response.body);
+     data=jsonDecode(response.body);
       print('Payment Intent Body->>> ${response.body.toString()}');
       return jsonDecode(response.body);
     } catch (err) {
