@@ -75,7 +75,7 @@ class _LoginState extends State<Login> {
               Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('images/login3.jpeg'),
+                    image: AssetImage('images/login21.jpeg'),
                     fit: BoxFit.cover,
                     colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.9), BlendMode.dstATop),
                   ),
@@ -86,16 +86,16 @@ class _LoginState extends State<Login> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
-                          Text(email),
-                          Text(cnic),
-                          Text(password),
-                          CircleAvatar(
-                            backgroundColor: Colors.green[900],
-                            radius: 115,
+                          Padding(
+                            padding: const EdgeInsets.all(29),
                             child: CircleAvatar(
-                              backgroundColor: Colors.grey[300],
-                              backgroundImage: AssetImage('images/pp21.png'),
+                              backgroundColor: Colors.green[900],
                               radius: 105,
+                              child: CircleAvatar(
+                                backgroundColor: Colors.grey[300],
+                                backgroundImage: AssetImage('images/pp21.png'),
+                                radius: 95,
+                              ),
                             ),
                           ),
                           Padding(padding: const EdgeInsets.all(12),
@@ -451,7 +451,16 @@ class _SignUpState extends State<SignUp> {
                           email = twoController.text;
                           cnic = threeController.text;
                           password = fourController.text;
-                          Future SignUp() async{
+                          if(username != null || email != null || cnic != null || password != null){
+                          Future SignUp() async {
+                            final user = User(
+                                name: oneController.text,
+                                //email: email = twoController.text;
+                                cnic: int.parse(threeController.text),
+                                //password: password = fourController.text;
+                            );
+                            createUser(user);
+                          }
                             // showDialog(
                             //     context: context,
                             //   barrierDismissible: false,
@@ -462,12 +471,14 @@ class _SignUpState extends State<SignUp> {
                                 email: twoController.text.trim(),
                                 password: password.trim(),
                               );
+
                             } on FirebaseAuthException catch (e) {
                               print(e);
                             }
                             //navigatorKey.currentState!.popUntil((route) => route.isFirst);
                           }
-                        },
+                          };
+                          },
                         color: Colors.green,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
@@ -484,6 +495,12 @@ class _SignUpState extends State<SignUp> {
       ),
     );
   }
+}
+Future createUser(User user) async{
+  final docUser = FirebaseFirestore.instance.collection('normalusers').doc();
+  user.id = docUser.id;
+  final json = user.toJson();
+  await docUser.set(json);
 }
 class LoginOrSignUp extends StatefulWidget {
   LoginOrSignUp({Key? key}) : super(key: key);
