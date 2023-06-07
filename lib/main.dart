@@ -1,9 +1,9 @@
 import 'dart:ffi';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'stripe.dart';
+
 //import 'oldstripe.dart';
-import 'mainstripe.dart';
+
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -446,8 +446,8 @@ class _MainMenuState extends State<MainMenu> {
         );
 
 
-        String id=data["id"];
-        var amount2=(data["amount"]/100);
+        // String id=data["id"];
+        // var amount2=(data["amount"]/100);
         //
 
 
@@ -493,7 +493,7 @@ class _MainMenuState extends State<MainMenu> {
         },
         body: body,
       );
-      data=jsonDecode(response.body);
+      String data=jsonDecode(response.body);
       print('Payment Intent Body->>> ${response.body.toString()}');
       return jsonDecode(response.body);
     } catch (err) {
