@@ -12,8 +12,8 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 
 
 void main() => runApp(MaterialApp(
-title: "UserPage",
-home: MainMenu(),
+  title: "UserPage",
+  home: MainMenu(),
 ));
 class MainMenu extends StatefulWidget {
   const MainMenu({Key? key}) : super(key: key);
@@ -223,15 +223,15 @@ class _MainMenuState extends State<MainMenu> {
                   Padding(
                     padding: const EdgeInsets.all(25),
                     child: Container(
-                      width: 100,
-                      height: 220,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black, width: 4),
-                        borderRadius: BorderRadius.circular(7)
-                      ),
-                      child: Image.asset(busImage ,
-                          fit: BoxFit.cover
-                      )
+                        width: 100,
+                        height: 220,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black, width: 4),
+                            borderRadius: BorderRadius.circular(7)
+                        ),
+                        child: Image.asset(busImage ,
+                            fit: BoxFit.cover
+                        )
                     ),
                   ),
                   Row(
@@ -332,7 +332,7 @@ class _MainMenuState extends State<MainMenu> {
                         suffixIcon: IconButton(
                           onPressed: () {
                             passengerController.clear();
-                            },
+                          },
                           icon: const Icon(Icons.clear),
                         ),
                         border: OutlineInputBorder(
@@ -363,9 +363,9 @@ class _MainMenuState extends State<MainMenu> {
                               ScaffoldMessenger.of(context).showSnackBar(snackBar);
                             }
                             else{
-                            error = "Please complete all fields!";
-                            var snackBar = SnackBar(content: Text('Please complete all fields!'));
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              error = "Please complete all fields!";
+                              var snackBar = SnackBar(content: Text('Please complete all fields!'));
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
                             }
                           }
                         },
@@ -493,7 +493,7 @@ class _MainMenuState extends State<MainMenu> {
         },
         body: body,
       );
-      String data=jsonDecode(response.body);
+     // data=jsonDecode(response.body);
       print('Payment Intent Body->>> ${response.body.toString()}');
       return jsonDecode(response.body);
     } catch (err) {
