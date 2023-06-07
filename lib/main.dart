@@ -4,6 +4,12 @@ import 'package:flutter/material.dart';
 import 'stripe.dart';
 //import 'oldstripe.dart';
 import 'mainstripe.dart';
+import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:http/http.dart' as http;
+import 'package:flutter_stripe/flutter_stripe.dart';
+
 
 void main() => runApp(MaterialApp(
 title: "UserPage",
@@ -15,6 +21,7 @@ class MainMenu extends StatefulWidget {
   _MainMenuState createState() => _MainMenuState();
 }
 class _MainMenuState extends State<MainMenu> {
+  Map<String, dynamic>? paymentIntent;
   final passengerController = TextEditingController();
   var passenger = 0;
   var error = '';
@@ -346,7 +353,8 @@ class _MainMenuState extends State<MainMenu> {
                         onTap: () {
                           passenger = int.parse(passengerController.text);
                           if (selectedService != null || selectedBus != null || selectedPickup != null || selectedDestination != null || passenger != 0){
-                            Navigator.of(context).push(MaterialPageRoute( builder: (context) => HomeScreen(passenger: passenger,),));
+                            //Navigator.of(context).push(MaterialPageRoute( builder: (context) => HomeScreen2(passenger: passenger,),));
+                            makePayment();
                           }//passenger: passenger
                           else{
                             if (selectedPickup == selectedDestination){
@@ -376,4 +384,128 @@ class _MainMenuState extends State<MainMenu> {
       ),
     );
   }
+
+  Future<void> makePayment() async {
+    try {
+      // WidgetsFlutterBinding.ensureInitialized();
+      // Stripe.publishableKey = 'pk_test_51NCzkJI3GjRc0k0GRc5SfTIoeaHzyaYirzzindw9IkPdbw7la71lCzcx26PDJw4LPhajCk9zqrjarb2Hhxdq5t0D00QNf1VOpH';
+      int totalamount=((50000*passenger));
+
+
+      String totalamountstring=totalamount.toString();
+      paymentIntent = await createPaymentIntent(totalamountstring, 'PKR');
+      //Payment Sheet
+      await Stripe.instance.initPaymentSheet(
+          paymentSheetParameters: SetupPaymentSheetParameters(
+              paymentIntentClientSecret: paymentIntent!['client_secret'],
+              // applePay: const PaymentSheetApplePay(merchantCountryCode: '+92',),
+              // googlePay: const PaymentSheetGooglePay(testEnv: true, currencyCode: "US", merchantCountryCode: "+92"),
+              style: ThemeMode.dark,
+              merchantDisplayName: 'Adnan')).then((value) {});
+
+
+      ///now finally display payment sheeet
+      ///
+
+
+
+      displayPaymentSheet();
+    } catch (e, s) {
+      print('exception:$e$s');
+    }
+  }
+
+  displayPaymentSheet() async {
+    try {
+      await Stripe.instance.presentPaymentSheet(
+      ).then((value) async {
+        showDialog(
+            context: context,
+            builder: (_) =>
+                AlertDialog(
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: const [
+                          Icon(Icons.check_circle, color: Colors.green,),
+                          Text("Payment Successfull"),
+                        ],
+                      ),
+                    ],
+                  ),
+                ));
+        // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("paid successfully")));
+
+        paymentIntent = null;
+
+
+
+        WidgetsFlutterBinding.ensureInitialized();
+        await Firebase.initializeApp(
+        );
+
+
+        String id=data["id"];
+        var amount2=(data["amount"]/100);
+        //
+
+
+        final db = FirebaseFirestore.instance;
+        //final data2 = {"id":id,"name": "-", "passengers":passengers.text,"date": FieldValue.serverTimestamp(),"email":"-","amount":amount2,"service":bus,"pickup":pickup,"destination":destination};
+        //db.collection(bus).doc("1").set(data2);
+
+      }).onError((error, stackTrace) {
+        print('Error is:--->$error $stackTrace');
+      });
+    } on StripeException catch (e) {
+      print('Error is:---> $e');
+      showDialog(
+          context: context,
+          builder: (_) =>
+          const AlertDialog(
+            content: Text("Cancelled "),
+          ));
+    } catch (e) {
+      print('$e');
+    }
+  }
+
+  //  Future<Map<String, dynamic>>
+  createPaymentIntent(String amount, String currency) async {
+    try {
+      int amount2=int.parse(amount);
+      double amount3=amount2/10;
+
+
+
+      Map<String, dynamic> body = {
+        'amount': amount3.round().toString(),
+        'currency': currency,
+        'payment_method_types[]': 'card'
+      };
+
+      var response = await http.post(
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        headers: {
+          'Authorization': 'Bearer sk_test_51NCzkJI3GjRc0k0GX7SaP3JV30KCmrCpKWxGWitExO0yAh8LShdMk8cisb6uD7sncqdNMSvuZ66RMZoWh0uCsz3900QsFbIT17',
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: body,
+      );
+      data=jsonDecode(response.body);
+      print('Payment Intent Body->>> ${response.body.toString()}');
+      return jsonDecode(response.body);
+    } catch (err) {
+      // ignore: avoid_print
+      print('err charging user: ${err.toString()}');
+    }
+  }
+
+  calculateAmount(String amount) {
+    final calculatedAmout = (int.parse(amount)) * 100*passenger;
+    return calculatedAmout.toString();
+  }
+
+
 }
