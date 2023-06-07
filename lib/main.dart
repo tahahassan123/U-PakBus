@@ -8,6 +8,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_stripe/flutter_stripe.dart';
 
+
+
+
+
+
 void main() => runApp(
     MaterialApp(
       title: "UserPage",
@@ -18,6 +23,8 @@ class MainMenu extends StatefulWidget {
   @override
   _MainMenuState createState() => _MainMenuState();
 }
+
+var data,serviceid;
 class _MainMenuState extends State<MainMenu> {
   Map<String, dynamic>? paymentIntent;
   final passengerController = TextEditingController();
@@ -359,7 +366,18 @@ class _MainMenuState extends State<MainMenu> {
                         onTap: () {
                           passenger = int.parse(passengerController.text);
                           if (selectedService != null || selectedBus != null || selectedPickup != null || selectedDestination != null || passenger != 0){
+
                             //Navigator.of(context).push(MaterialPageRoute( builder: (context) => HomeScreen2(passenger: passenger,),));
+
+                           if(selectedService=='Peoples Bus')
+                             serviceid=1;
+                          if(selectedService=='EV Bus')
+                          serviceid=2;
+                          if(selectedService=='Greenline Metro')
+                          serviceid=3;
+
+
+
                             makePayment();
                           }//passenger: passenger
                           else{
@@ -420,6 +438,14 @@ class _MainMenuState extends State<MainMenu> {
               merchantDisplayName: 'Adnan')).then((value) {});
       
       ///now finally display payment sheet
+
+
+
+
+
+
+
+
       
       displayPaymentSheet();
     } catch (e, s) {
@@ -448,15 +474,18 @@ class _MainMenuState extends State<MainMenu> {
                 ));
         // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("paid successfully")));
         paymentIntent = null;
-        WidgetsFlutterBinding.ensureInitialized();
-        await Firebase.initializeApp(
-        );
+
         // String id=data["id"];
         // var amount2=(data["amount"]/100);
         //
-        final db = FirebaseFirestore.instance;
+
         //final data2 = {"id":id,"name": "-", "passengers":passengers.text,"date": FieldValue.serverTimestamp(),"email":"-","amount":amount2,"service":bus,"pickup":pickup,"destination":destination};
         //db.collection(bus).doc("1").set(data2);
+        var id=data["id"];
+        var amount2=(data["amount"]/100);
+        final db = FirebaseFirestore.instance;
+        final data2 = {"id":id,"name": "-", "passengers":passenger,"date": FieldValue.serverTimestamp(),"email":"-","amount":amount2,"service":selectedService,"pickup":selectedPickup,"destination":selectedDestination,"serviceid":serviceid.toString()};
+        db.collection("tickets").doc("1").set(data2);
       }).onError((error, stackTrace) {
         print('Error is:--->$error $stackTrace');
       });
@@ -492,6 +521,7 @@ class _MainMenuState extends State<MainMenu> {
       );
       // data=jsonDecode(response.body);
       print('Payment Intent Body->>> ${response.body.toString()}');
+      data=jsonDecode(response.body);
       return jsonDecode(response.body);
     } catch (err) {
       // ignore: avoid_print
