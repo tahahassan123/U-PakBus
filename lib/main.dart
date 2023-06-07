@@ -1,19 +1,17 @@
 import 'dart:ffi';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
-//import 'oldstripe.dart';
-
+import 'menu.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:flutter_stripe/flutter_stripe.dart';
 
-
-void main() => runApp(MaterialApp(
-  title: "UserPage",
-  home: MainMenu(),
+void main() => runApp(
+    MaterialApp(
+      title: "UserPage",
+      home: MainMenu(),
 ));
 class MainMenu extends StatefulWidget {
   const MainMenu({Key? key}) : super(key: key);
@@ -56,7 +54,6 @@ class _MainMenuState extends State<MainMenu> {
     'Tank Chowk': 'EV-1', 'Model Colony Mor': 'EV-1', 'Jinnah Ave': 'EV-1', 'Airport': 'EV-1', 'Colony Gate': 'EV-1', 'Nata Khan Bridge': 'EV-1', 'Drigh Road Station': 'EV-1', 'PAF Base Faisal': 'EV-1', 'Laal Kothi': 'EV-1', 'Karsaz': 'EV-1', 'Nursery': 'EV-1', 'FTC': 'EV-1', 'Korangi Road': 'EV-1', 'DHA Phase 1': 'EV-1', 'Masjid e Ayesha': 'EV-1', 'Clock Tower DHA': 'EV-1',
     'Bahria Town': 'EV-2', 'Damba Goth': 'EV-2', 'Toll Plaza': 'EV-2', 'Baqai University': 'EV-2', 'Malir Cantt Gate 5': 'EV-2', 'Malir Cantt Gate 6': 'EV-2', 'Tank Chowk': 'EV-2', 'Model Mor': 'EV-2', 'Jinnah Ave': 'EV-2', 'Malir Halt': 'EV-2',
     'Numaish Chowrangi': 'BRT', 'Patel Para (Guru Mandir) Station': 'BRT', 'Lasbela Chowk Station': 'BRT', 'Sanitary Market (Gulbahar) Station': 'BRT', 'Nazimabad No.1 Station': 'BRT', 'Enquiry Office Station': 'BRT', 'Annu Bhai Park Station': 'BRT', 'Board Office Station (to Orange Line)': 'BRT', 'Hyderi Station': 'BRT', 'Five Star Chowrangi Station': 'BRT', 'Jummah Bazaar (Bayani Center) Station': 'BRT', 'Erum Shopping Mall (Shadman No.2) Station': 'BRT', 'Nagan Chowrangi Station': 'BRT', 'U.P. More Station': 'BRT', 'Road 4200 (Saleem Center) Station': 'BRT', 'Power House Chowrangi Station': 'BRT', 'Road 2400 (Aisha Complex) Station': 'BRT', '2 Minute Chowrangi Station': 'BRT', 'Surjani Chowrangi (4K) Station': 'BRT', 'Karimi Chowrangi Station': 'BRT', 'KDA Flats Station': 'BRT', 'Abdullah Chowk Station': 'BRT',
-
   };
   List Pickup=[];
   PickupDropDown(busNumber){
@@ -98,7 +95,16 @@ class _MainMenuState extends State<MainMenu> {
       home: Scaffold(
         appBar: AppBar(
           title: Text('Universal Pak Bus',),
+          centerTitle: true,
           backgroundColor: Colors.green[800],
+          actions: [
+            PopupMenuButton<MenuItem>(
+              onSelected: (item) => onSelected(context, item),
+              itemBuilder: (context) => [
+                ...MenuItems.items.map(buildItem).toList(),
+              ],
+            ),
+          ],
         ),
         body: Container(
           decoration: BoxDecoration(
@@ -372,7 +378,19 @@ class _MainMenuState extends State<MainMenu> {
                         child: SizedBox(
                           width: 100,
                           height: 50,
-                          child: Image.asset('images/button2.png',),
+                          child: Column(
+                            children: [
+                              Stack(
+                                children: [
+                                  Image.asset('images/button2.png'),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 6),
+                                    child: Center(child: Text('Confirm', style: TextStyle(color: Colors.white, fontSize: 15),)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -390,8 +408,6 @@ class _MainMenuState extends State<MainMenu> {
       // WidgetsFlutterBinding.ensureInitialized();
       // Stripe.publishableKey = 'pk_test_51NCzkJI3GjRc0k0GRc5SfTIoeaHzyaYirzzindw9IkPdbw7la71lCzcx26PDJw4LPhajCk9zqrjarb2Hhxdq5t0D00QNf1VOpH';
       int totalamount=((50000*passenger));
-
-
       String totalamountstring=totalamount.toString();
       paymentIntent = await createPaymentIntent(totalamountstring, 'PKR');
       //Payment Sheet
@@ -402,19 +418,14 @@ class _MainMenuState extends State<MainMenu> {
               // googlePay: const PaymentSheetGooglePay(testEnv: true, currencyCode: "US", merchantCountryCode: "+92"),
               style: ThemeMode.dark,
               merchantDisplayName: 'Adnan')).then((value) {});
-
-
-      ///now finally display payment sheeet
-      ///
-
-
-
+      
+      ///now finally display payment sheet
+      
       displayPaymentSheet();
     } catch (e, s) {
       print('exception:$e$s');
     }
   }
-
   displayPaymentSheet() async {
     try {
       await Stripe.instance.presentPaymentSheet(
@@ -436,25 +447,16 @@ class _MainMenuState extends State<MainMenu> {
                   ),
                 ));
         // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("paid successfully")));
-
         paymentIntent = null;
-
-
-
         WidgetsFlutterBinding.ensureInitialized();
         await Firebase.initializeApp(
         );
-
-
         // String id=data["id"];
         // var amount2=(data["amount"]/100);
         //
-
-
         final db = FirebaseFirestore.instance;
         //final data2 = {"id":id,"name": "-", "passengers":passengers.text,"date": FieldValue.serverTimestamp(),"email":"-","amount":amount2,"service":bus,"pickup":pickup,"destination":destination};
         //db.collection(bus).doc("1").set(data2);
-
       }).onError((error, stackTrace) {
         print('Error is:--->$error $stackTrace');
       });
@@ -470,21 +472,16 @@ class _MainMenuState extends State<MainMenu> {
       print('$e');
     }
   }
-
   //  Future<Map<String, dynamic>>
   createPaymentIntent(String amount, String currency) async {
     try {
       int amount2=int.parse(amount);
       double amount3=amount2/10;
-
-
-
       Map<String, dynamic> body = {
         'amount': amount3.round().toString(),
         'currency': currency,
         'payment_method_types[]': 'card'
       };
-
       var response = await http.post(
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
@@ -501,11 +498,19 @@ class _MainMenuState extends State<MainMenu> {
       print('err charging user: ${err.toString()}');
     }
   }
-
   calculateAmount(String amount) {
     final calculatedAmout = (int.parse(amount)) * 100*passenger;
     return calculatedAmout.toString();
   }
-
-
+  PopupMenuItem<MenuItem> buildItem(MenuItem item) => PopupMenuItem(
+    value: item,
+    child: Text(item.text),
+  );
+  void onSelected(BuildContext context, MenuItem item) {
+    switch (item) {
+      case MenuItems.itemLogout:
+        FirebaseAuth.instance.signOut();
+        break;
+    }
+  }
 }
