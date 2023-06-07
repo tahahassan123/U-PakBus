@@ -493,7 +493,7 @@ class _MainMenuState extends State<MainMenu> {
         },
         body: body,
       );
-      String data=jsonDecode(response.body);
+      // data=jsonDecode(response.body);
       print('Payment Intent Body->>> ${response.body.toString()}');
       return jsonDecode(response.body);
     } catch (err) {
