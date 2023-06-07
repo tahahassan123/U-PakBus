@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:pakistanbusapp/stripe.dart';
 
-import 'oldstripe.dart';
+
 //import 'oldstripe.dart';
 
 
