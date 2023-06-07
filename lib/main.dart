@@ -2,8 +2,9 @@ import 'dart:ffi';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'stripe.dart';
-//import 'oldstripe.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'mainstripe.dart';
+import 'menu.dart';
 
 void main() => runApp(MaterialApp(
 title: "UserPage",
@@ -91,7 +92,16 @@ class _MainMenuState extends State<MainMenu> {
       home: Scaffold(
         appBar: AppBar(
           title: Text('Universal Pak Bus',),
+          centerTitle: true,
           backgroundColor: Colors.green[800],
+          actions: [
+            PopupMenuButton<MenuItem>(
+              onSelected: (item) => onSelected(context, item),
+              itemBuilder: (context) => [
+                ...MenuItems.items.map(buildItem).toList(),
+              ],
+            ),
+          ],
         ),
         body: Container(
           decoration: BoxDecoration(
@@ -375,5 +385,16 @@ class _MainMenuState extends State<MainMenu> {
         ),
       ),
     );
+  }
+}
+PopupMenuItem<MenuItem> buildItem(MenuItem item) => PopupMenuItem(
+  value: item,
+  child: Text(item.text),
+);
+void onSelected(BuildContext context, MenuItem item) {
+  switch (item) {
+    case MenuItems.itemLogout:
+      FirebaseAuth.instance.signOut();
+      break;
   }
 }

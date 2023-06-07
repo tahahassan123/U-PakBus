@@ -23,6 +23,7 @@ class Driver extends StatelessWidget{
         ),
         appBar: AppBar(
           title: Text('U-PakBus Driver'),
+          centerTitle: true,
           backgroundColor: Colors.green[800],
         ),
       ),
