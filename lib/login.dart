@@ -21,6 +21,8 @@ Future<void> main() async {
     home: Main(),
   ));}
 
+var signupemail,signupname,signupcnic,signuppassword;
+
 class Main extends StatelessWidget{
   const Main({super.key});
   @override
@@ -177,6 +179,7 @@ class _LoginState extends State<Login> {
                           Padding(padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 120),
                             child: MaterialButton(
                               onPressed: () async {
+                                var collectionRef=await FirebaseFirestore.instance;
                                 doc1=false;
                                 doc2=false;
                                 cnicfromdb = " ";
@@ -185,7 +188,7 @@ class _LoginState extends State<Login> {
                                 email = oneController.text;
                                 cnic = twoController.text;
                                 password = threeController.text;
-                                WidgetsFlutterBinding.ensureInitialized();
+
                                 try {
                                   FirebaseAuth.instance.signOut();
                                   FirebaseAuth auth = FirebaseAuth.instance;
@@ -202,8 +205,8 @@ class _LoginState extends State<Login> {
                                       print('User is signed in!');
                                       DocumentSnapshot snapshot;
                                       try {
-                                        var collectionRef = FirebaseFirestore.instance.collection('normalusers');
-                                        await collectionRef.doc(email).get().then((doc) {
+                                        var useremailornot = collectionRef.collection('normalusers');
+                                        await useremailornot.doc(email).get().then((doc) {
                                           doc1 = doc.exists;
                                         });
                                       }
@@ -211,8 +214,8 @@ class _LoginState extends State<Login> {
                                       {
                                       }
                                       try {
-                                        var collectionRef = FirebaseFirestore.instance.collection('drivers');
-                                        await collectionRef.doc(email).get().then((doc) {
+                                        var driveremailornot = collectionRef.collection('drivers');
+                                        await driveremailornot.doc(email).get().then((doc) {
                                           doc2 = doc.exists;
                                         });
                                       }
@@ -245,8 +248,10 @@ class _LoginState extends State<Login> {
                                         namefromdb=" ";
                                         servicefromdb=" ";
                                       }
+
                                       if(cnic==cnicfromdb)
                                       {
+                                        print(cnic+" inside"+cnicfromdb);
                                         print("successful authentication");
 
                                         if(doc2){
@@ -260,21 +265,21 @@ class _LoginState extends State<Login> {
                                       }
                                       else
                                       {
-                                        print("cnic does not match with login credentials");
                                         FirebaseAuth.instance.signOut();
+                                        createsnackbar("cnic does not match with login credentials");
+
                                       }
                                     }
                                   });
                                 } on FirebaseAuthException catch (e) {
                                   if (e.code == 'user-not-found') {
-                                    print('No user found for that email.');
+                                    createsnackbar("No user found for that email.");
                                   } else if (e.code == 'wrong-password') {
-                                    print('Wrong password provided for that user.');
+                                   createsnackbar("Wrong password provided for that user.");
                                   }
                                   else
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                      content: Text("Sending Message"),
-                                    ));
+                                    createsnackbar("something wrong");
+
                                 }
                               },
                               color: Colors.green,
@@ -296,6 +301,12 @@ class _LoginState extends State<Login> {
       ),
     );
   }
+  void createsnackbar(String e)
+  {
+    final snackBar = SnackBar(content: Text(e));
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 }
 class SignUp extends StatefulWidget {
   final VoidCallback onClickSignup;
@@ -306,6 +317,7 @@ class SignUp extends StatefulWidget {
   @override
   _SignUpState createState() => _SignUpState();
 }
+bool checkingemailbool=false;
 class _SignUpState extends State<SignUp> {
   final oneController = TextEditingController();
   final twoController = TextEditingController();
@@ -447,27 +459,53 @@ class _SignUpState extends State<SignUp> {
                     Padding(padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 120),
                       child: MaterialButton(
                         onPressed: () async {
-                          username = oneController.text;
-                          email = twoController.text;
-                          cnic = threeController.text;
-                          password = fourController.text;
-                          Future SignUp() async{
+                          signupname = oneController.text;
+                          signupemail = twoController.text;
+                          signupcnic = threeController.text;
+                          signuppassword = fourController.text;
+
+    try {
+     checkingemailbool=false;
+    var checkingemail = FirebaseFirestore.instance.collection('normalusers');
+    await checkingemail.doc(signupemail).get().then((doc) {
+    checkingemailbool = doc.exists;
+
+    });
+    } on Exception catch (e) {
+    // make it explicit that this function can throw exceptions
+
+    }
+
+
+
                             // showDialog(
                             //     context: context,
                             //   barrierDismissible: false,
                             //   builder: (context) => Center(child: CircularProgressIndicator(),),
                             // );
+
+                            if(!checkingemailbool)
                             try{
+
+
                               await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                                email: twoController.text.trim(),
-                                password: password.trim(),
+                                email: signupemail,
+                                password: signuppassword,
                               );
+
+
+                              final signupdb = FirebaseFirestore.instance;
+                              final signupdata = { "cnic":signupcnic,"name": signupname};
+                              signupdb.collection("normalusers").doc(signupemail).set(signupdata);
                             } on FirebaseAuthException catch (e) {
-                              print(e);
+                              createsnackbar(e.toString());
                             }
+                            else
+                             createsnackbar("email already registered") ;
+                            },
                             //navigatorKey.currentState!.popUntil((route) => route.isFirst);
-                          }
-                        },
+
+
                         color: Colors.green,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
@@ -484,6 +522,14 @@ class _SignUpState extends State<SignUp> {
       ),
     );
   }
+  void createsnackbar(String e)
+  {
+    final snackBar = SnackBar(content: Text(e));
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+
 }
 class LoginOrSignUp extends StatefulWidget {
   LoginOrSignUp({Key? key}) : super(key: key);
@@ -500,3 +546,8 @@ class _LoginOrSignUpState extends State<LoginOrSignUp> {
 
 class DefaultFirebaseOptions {
 }
+
+
+
+
+
