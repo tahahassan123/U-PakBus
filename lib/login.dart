@@ -179,7 +179,7 @@ class _LoginState extends State<Login> {
                           Padding(padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 120),
                             child: MaterialButton(
                               onPressed: () async {
-                                var collectionRef=await FirebaseFirestore.instance;
+
                                 doc1=false;
                                 doc2=false;
                                 cnicfromdb = " ";
@@ -205,7 +205,8 @@ class _LoginState extends State<Login> {
                                       print('User is signed in!');
                                       DocumentSnapshot snapshot;
                                       try {
-                                        var useremailornot = collectionRef.collection('normalusers');
+                                        var collectionRef1=await FirebaseFirestore.instance;
+                                        var useremailornot = collectionRef1.collection('normalusers');
                                         await useremailornot.doc(email).get().then((doc) {
                                           doc1 = doc.exists;
                                         });
@@ -214,7 +215,8 @@ class _LoginState extends State<Login> {
                                       {
                                       }
                                       try {
-                                        var driveremailornot = collectionRef.collection('drivers');
+                                        var collectionRef2=await FirebaseFirestore.instance;
+                                        var driveremailornot = collectionRef2.collection('drivers');
                                         await driveremailornot.doc(email).get().then((doc) {
                                           doc2 = doc.exists;
                                         });
