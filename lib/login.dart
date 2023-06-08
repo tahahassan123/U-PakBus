@@ -8,9 +8,6 @@ import 'mainDriver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
-
-
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = 'pk_test_51NCzkJI3GjRc0k0GRc5SfTIoeaHzyaYirzzindw9IkPdbw7la71lCzcx26PDJw4LPhajCk9zqrjarb2Hhxdq5t0D00QNf1VOpH';
@@ -20,6 +17,12 @@ Future<void> main() async {
     title: "LoginPage",
     home: Main(),
   ));}
+
+// Stream<List<User>> readUsers() => FirebaseFirestore.instance
+//     .collection('normalusers')
+//     .snapshots()
+//     .map((snapshots) =>
+//       snapshots.docs.map((doc) => UserSignUp.fromJson(doc.data())).toList());
 
 class Main extends StatelessWidget{
   const Main({super.key});
@@ -444,7 +447,8 @@ class _SignUpState extends State<SignUp> {
                         ),
                       ),
                     ),
-                    Padding(padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 120),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 120),
                       child: MaterialButton(
                         onPressed: () async {
                           username = oneController.text;
@@ -453,11 +457,9 @@ class _SignUpState extends State<SignUp> {
                           password = fourController.text;
                           if(username != null || email != null || cnic != null || password != null){
                           Future SignUp() async {
-                            final user = User(
-                                name: oneController.text,
-                                //email: email = twoController.text;
-                                cnic: int.parse(threeController.text),
-                                //password: password = fourController.text;
+                            final user = UserSignUp(
+                              cnic: int.parse(threeController.text),
+                              name: oneController.text,
                             );
                             createUser(user);
                           }
@@ -477,7 +479,6 @@ class _SignUpState extends State<SignUp> {
                             }
                             //navigatorKey.currentState!.popUntil((route) => route.isFirst);
                           }
-                          };
                           },
                         color: Colors.green,
                         shape: RoundedRectangleBorder(
@@ -496,12 +497,64 @@ class _SignUpState extends State<SignUp> {
     );
   }
 }
-Future createUser(User user) async{
+class UserSignUp{
+  String id;
+  final String name;
+  final int cnic;
+  final int amount;
+  final String date;
+  final String email;
+  final String destination;
+  final String pickup;
+  final int passengers;
+  final String service;
+  final String serviceid;
+  UserSignUp({
+    this.id = '',
+    required this.name,
+    required this.cnic,
+    required this.amount,
+    required this.date,
+    required this.email,
+    required this.destination,
+    required this.pickup,
+    required this.passengers,
+    required this.service,
+    required this.serviceid,
+  });
+  Map<String, dynamic> toJson() => {
+  'id': id,
+  'name': name,
+  'cnic': cnic,
+  'amount':amount,
+  'date': date,
+  'email': email,
+  'destination': destination,
+  'pickup': pickup,
+  'passengers': passengers,
+  'service': service,
+  'serviceid': serviceid,
+  };
+static UserSignUp fromJson(Map<String, dynamic> json) => UserSignUp(
+  cnic: json['cnic'],
+  amount: json['amount'],
+  date: json['date'],// as Timestamp).toData(),
+  destination: json['destination'],
+  email: json['email'],
+  id: json['id'],
+  name: json['name'],
+  passengers: json['passengers'],
+  pickup: json['pickup'],
+  service: json['service'],
+  serviceid: json['serviceid'],
+);
+}
+Future createUser(UserSignUp user) async{
   final docUser = FirebaseFirestore.instance.collection('normalusers').doc();
   user.id = docUser.id;
   final json = user.toJson();
   await docUser.set(json);
-}
+  }
 class LoginOrSignUp extends StatefulWidget {
   LoginOrSignUp({Key? key}) : super(key: key);
   @override

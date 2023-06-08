@@ -8,11 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_stripe/flutter_stripe.dart';
 
-
-
-
-
-
 void main() => runApp(
     MaterialApp(
       title: "UserPage",
@@ -25,6 +20,7 @@ class MainMenu extends StatefulWidget {
 }
 
 var data,serviceid;
+
 class _MainMenuState extends State<MainMenu> {
   Map<String, dynamic>? paymentIntent;
   final passengerController = TextEditingController();
@@ -375,9 +371,6 @@ class _MainMenuState extends State<MainMenu> {
                           serviceid=2;
                           if(selectedService=='Greenline Metro')
                           serviceid=3;
-
-
-
                             makePayment();
                           }//passenger: passenger
                           else{
@@ -436,17 +429,8 @@ class _MainMenuState extends State<MainMenu> {
               // googlePay: const PaymentSheetGooglePay(testEnv: true, currencyCode: "US", merchantCountryCode: "+92"),
               style: ThemeMode.dark,
               merchantDisplayName: 'Adnan')).then((value) {});
-      
+
       ///now finally display payment sheet
-
-
-
-
-
-
-
-
-      
       displayPaymentSheet();
     } catch (e, s) {
       print('exception:$e$s');
@@ -474,11 +458,9 @@ class _MainMenuState extends State<MainMenu> {
                 ));
         // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("paid successfully")));
         paymentIntent = null;
-
         // String id=data["id"];
         // var amount2=(data["amount"]/100);
         //
-
         //final data2 = {"id":id,"name": "-", "passengers":passengers.text,"date": FieldValue.serverTimestamp(),"email":"-","amount":amount2,"service":bus,"pickup":pickup,"destination":destination};
         //db.collection(bus).doc("1").set(data2);
         var id=data["id"];
