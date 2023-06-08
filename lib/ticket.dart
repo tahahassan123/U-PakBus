@@ -43,13 +43,13 @@ class _TicketState extends State<Ticket> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 0),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(40),
+                    borderRadius: BorderRadius.circular(0),
                     child: ExpansionTile(
                        //backgroundColor: Colors.white,
                        children: [
                          Container(
                            width: 350,
-                           height: 450,
+                           height: 470,
                            child: Stack(
                              children: [
                                Image.asset('images/ticket3.jpg',
@@ -59,7 +59,7 @@ class _TicketState extends State<Ticket> {
                                Column(
                                  children: [
                                    Padding(
-                                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
+                                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                                      child: Row(
                                        children: [
                                          Text('Holder: ',
