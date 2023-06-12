@@ -1,6 +1,8 @@
 import 'dart:ffi';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:pakistanbusapp/ticket.dart';
+import 'login.dart';
 import 'menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:convert';
@@ -9,20 +11,28 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'dart:math';
 
+
+
+
+
+
+
 void main() => runApp(
     MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: "UserPage",
       home: MainMenu(),
     ));
 class MainMenu extends StatefulWidget {
-  const MainMenu({Key? key}) : super(key: key);
+  late var email,cnicfromdb,namefromdb;
+  MainMenu({Key? key,@required this.email,@required this.cnicfromdb,@required this.namefromdb}) : super(key: key);
   @override
-  _MainMenuState createState() => _MainMenuState();
+  _MainMenuState createState() => _MainMenuState(email,cnicfromdb,namefromdb);
 }
 
 var data,serviceid;
 class _MainMenuState extends State<MainMenu> {
+  String email,cnicfromdb,namefromdb;
+  _MainMenuState(this.email,this.cnicfromdb,this.namefromdb);
   Map<String, dynamic>? paymentIntent;
   final passengerController = TextEditingController();
   var passenger = 0;
@@ -363,13 +373,18 @@ class _MainMenuState extends State<MainMenu> {
                         onTap: () {
                           passenger = int.parse(passengerController.text);
                           if (selectedService != null || selectedBus != null || selectedPickup != null || selectedDestination != null || passenger != 0){
+
                             //Navigator.of(context).push(MaterialPageRoute( builder: (context) => HomeScreen2(passenger: passenger,),));
+
                             if(selectedService=='Peoples Bus')
                               serviceid=1;
                             if(selectedService=='EV Bus')
                               serviceid=2;
                             if(selectedService=='Greenline Metro')
                               serviceid=3;
+
+
+
                             makePayment();
                           }//passenger: passenger
                           else{
@@ -430,6 +445,15 @@ class _MainMenuState extends State<MainMenu> {
               merchantDisplayName: 'Adnan')).then((value) {});
 
       ///now finally display payment sheet
+
+
+
+
+
+
+
+
+
       displayPaymentSheet();
     } catch (e, s) {
       print('exception:$e$s');
@@ -461,13 +485,39 @@ class _MainMenuState extends State<MainMenu> {
         // String id=data["id"];
         // var amount2=(data["amount"]/100);
         //
+
         //final data2 = {"id":id,"name": "-", "passengers":passengers.text,"date": FieldValue.serverTimestamp(),"email":"-","amount":amount2,"service":bus,"pickup":pickup,"destination":destination};
         //db.collection(bus).doc("1").set(data2);
         var id=data["id"];
+        String idstring=id;
         var amount2=(data["amount"]/100);
         final db = FirebaseFirestore.instance;
-        final data2 = {"transactionid":id,"name": "-", "passengers":passenger.toString(),"date": FieldValue.serverTimestamp(),"email":"-","amount":amount2,"busNumber":selectedBus,"pickup":selectedPickup,"destination":selectedDestination,"serviceid":serviceid.toString()};
-        db.collection("tickets").doc("1").set(data2);
+        DateTime dateToday =new DateTime.now();
+        String currentdate = dateToday.toString().substring(0,10);
+
+        Random random = new Random();
+
+        int ticketnum = random.nextInt(9000) + 100;
+
+        final data2 = {"id":id,"name": namefromdb, "passengers":passenger,"date":currentdate ,"email":email,"amount":amount2,"pickup":selectedPickup,"destination":selectedDestination,"serviceid":serviceid.toString(),"busNumber":selectedBus,"ticketnum":ticketnum.toString()};
+        print(idstring.codeUnits);
+        db.collection("tickets").doc(cnicfromdb).set(data2);
+
+
+        DocumentSnapshot snapshot;
+        var ticketdata=await FirebaseFirestore.instance.collection('tickets').doc(cnicfromdb).get();
+        snapshot=ticketdata;
+        var tamount=snapshot.get("amount").toString();
+        var tdate=snapshot.get("date").toString();
+        var tdest=snapshot.get("destination").toString();
+        var tid=snapshot.get("id").toString();
+        var tpassengers=snapshot.get("passengers").toString();
+        var tpickup=snapshot.get("pickup").toString();
+        var tserviceid=snapshot.get("serviceid").toString();
+        var tbus=snapshot.get("busNumber").toString();
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Ticket(email:email,cnicfromdb:cnicfromdb,namefromdb:namefromdb,tamount:tamount,tdate:tdate,tdest:tdest,tid:tid,tpickup:tpickup,tpassengers:tpassengers,tserviceid:tserviceid,tbus:tbus,ticketnum: ticketnum)), (_) => false);
+
+
       }).onError((error, stackTrace) {
         print('Error is:--->$error $stackTrace');
       });
@@ -522,6 +572,7 @@ class _MainMenuState extends State<MainMenu> {
     switch (item) {
       case MenuItems.itemLogout:
         FirebaseAuth.instance.signOut();
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Main()), (_) => false);
         break;
     }
   }
