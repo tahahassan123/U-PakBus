@@ -498,8 +498,9 @@ class _MainMenuState extends State<MainMenu> {
         Random random = new Random();
 
         int ticketnum = random.nextInt(9000) + 100;
+        String ticketnumstring=ticketnum.toString();
 
-        final data2 = {"id":id,"name": namefromdb, "passengers":passenger,"date":currentdate ,"email":email,"amount":amount2,"pickup":selectedPickup,"destination":selectedDestination,"serviceid":serviceid.toString(),"busNumber":selectedBus,"ticketnum":ticketnum.toString()};
+        final data2 = {"id":id,"name": namefromdb, "passengers":passenger,"date":currentdate ,"email":email,"amount":amount2,"pickup":selectedPickup,"destination":selectedDestination,"serviceid":serviceid.toString(),"busNumber":selectedBus,"ticketnum":ticketnumstring};
         print(idstring.codeUnits);
         db.collection("tickets").doc(cnicfromdb).set(data2);
 
@@ -515,7 +516,7 @@ class _MainMenuState extends State<MainMenu> {
         var tpickup=snapshot.get("pickup").toString();
         var tserviceid=snapshot.get("serviceid").toString();
         var tbus=snapshot.get("busNumber").toString();
-         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Ticket(email:email,cnicfromdb:cnicfromdb,namefromdb:namefromdb,tamount:tamount,tdate:tdate,tdest:tdest,tid:tid,tpickup:tpickup,tpassengers:tpassengers,tserviceid:tserviceid,tbus:tbus,ticketnum: ticketnum)), (_) => false);
+         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Ticket(email:email,cnicfromdb:cnicfromdb,namefromdb:namefromdb,tamount:tamount,tdate:tdate,tdest:tdest,tid:tid,tpickup:tpickup,tpassengers:tpassengers,tserviceid:tserviceid,tbus:tbus,ticketnum: ticketnumstring)), (_) => false);
 
 
       }).onError((error, stackTrace) {

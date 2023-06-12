@@ -35,8 +35,8 @@ void main() {
 
   runApp(Ticket());}
 class _TicketState extends State<Ticket> {
-  String email,cnicfromdb,namefromdb,tamount,tdate,tdest,tid,tpassengers,tpickup,tserviceid,tbus;
-  int ticketnum;
+  String email,cnicfromdb,namefromdb,tamount,tdate,tdest,tid,tpassengers,tpickup,tserviceid,tbus,ticketnum;
+
   _TicketState(this.email,this.cnicfromdb,this.namefromdb,this.tamount,this.tdate,this.tdest,this.tid,this.tpassengers,this.tpickup,this.tserviceid,this.tbus,this.ticketnum);
   @override
   Widget build(BuildContext context) {
@@ -126,32 +126,8 @@ class _TicketState extends State<Ticket> {
                                              ]
                                          ),
                                        ),
-                                       Padding(
-                                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                         child: Row(
-                                             children: [
-                                               Text('Payment id: ',
-                                                 style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
-                                               ),
-                                               Text( tid,
-                                                 style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
-                                               ),
-                                             ]
-                                         ),
-                                       ),
-                                       Padding(
-                                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                         child: Row(
-                                             children: [
-                                               Text('Service: ',
-                                                 style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
-                                               ),
-                                               Text( tserviceid,
-                                                 style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
-                                               ),
-                                             ]
-                                         ),
-                                       ),
+
+
                                        Padding(
                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                          child: Row(
@@ -230,32 +206,8 @@ class _TicketState extends State<Ticket> {
                                              ]
                                          ),
                                        ),
-                                       Padding(
-                                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                         child: Row(
-                                             children: [
-                                               Text('Service: ',
-                                                 style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
-                                               ),
-                                               Text( tserviceid,
-                                                 style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
-                                               ),
-                                             ]
-                                         ),
-                                       ),
-                                       Padding(
-                                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                                         child: Row(
-                                             children: [
-                                               Text('Bus No: ',
-                                                 style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
-                                               ),
-                                               Text( selectedBus,
-                                                 style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
-                                               ),
-                                             ]
-                                         ),
-                                       ),
+
+
                                      ],
                                    ),
                                  ),
@@ -267,7 +219,7 @@ class _TicketState extends State<Ticket> {
                           title: Padding(
                             padding: const EdgeInsets.only(left: 35),
                             child: Center(
-                                child: Text('Ticket No: '+ticketnum.toString(),
+                                child: Text('Ticket No: '+ticketnum,
                                   style: TextStyle(fontSize: 22, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
                                 ),
                             ),
