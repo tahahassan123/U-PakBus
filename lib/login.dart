@@ -9,19 +9,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
 
-
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = 'pk_test_51NCzkJI3GjRc0k0GRc5SfTIoeaHzyaYirzzindw9IkPdbw7la71lCzcx26PDJw4LPhajCk9zqrjarb2Hhxdq5t0D00QNf1VOpH';
   await Firebase.initializeApp(
   );
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     title: "LoginPage",
     home: Main(),
   ));}
 
-var signupemail,signupname,signupcnic,signuppassword;
+var signupemail,signupname,signupcnic,signuppassword,type;
 
 class Main extends StatelessWidget{
   const Main({super.key});
@@ -38,6 +37,15 @@ class Main extends StatelessWidget{
           }
           else if (snapshot.hasData){
             return MainMenu();
+            // if (type == 'user'){
+            //   return MainMenu();
+            // }
+            // else if (type == 'driver'){
+            //   return Driver();
+            // }
+            // else{
+            //   return Text('');
+            // }
           }
           else{
             return LoginOrSignUp();
@@ -63,6 +71,7 @@ class _LoginState extends State<Login> {
   String email = '';
   String cnic = '';
   String password = '';
+  //var type;
   bool doc1=false,doc2=false;
   String cnicfromdb=" ",servicefromdb=" ",namefromdb=" ";
   //async {}
@@ -71,233 +80,229 @@ class _LoginState extends State<Login> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('images/login3.jpeg'),
-                    fit: BoxFit.cover,
-                    colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.9), BlendMode.dstATop),
-                  ),
-                ),
-                child: Center(
-                  child: SingleChildScrollView(
-                    reverse: true,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          Text(email),
-                          Text(cnic),
-                          Text(password),
-                          CircleAvatar(
-                            backgroundColor: Colors.green[900],
-                            radius: 115,
-                            child: CircleAvatar(
-                              backgroundColor: Colors.grey[300],
-                              backgroundImage: AssetImage('images/pp21.png'),
-                              radius: 105,
-                            ),
-                          ),
-                          Padding(padding: const EdgeInsets.all(12),
-                            child: TextField(
-                              controller: oneController,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                hintText: "Enter your Email",
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    oneController.clear();
-                                  },
-                                  icon: const Icon(Icons.clear),
-                                ),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30)
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(padding: const EdgeInsets.all(12),
-                            child: TextField(
-                              controller: twoController,
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                hintText: "Enter your CNIC",
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    twoController.clear();
-                                  },
-                                  icon: const Icon(Icons.clear),
-                                ),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30)
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(padding: const EdgeInsets.all(12),
-                            child: TextField(
-                              controller: threeController,
-                              decoration: InputDecoration(
-
-                                filled: true,
-                                fillColor: Colors.white,
-                                hintText: "Enter your Password",
-                                suffixIcon: IconButton(
-                                  onPressed: () {
-                                    threeController.clear();
-                                  },
-                                  icon: const Icon(Icons.clear),
-                                ),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30)
-                                ),
-                              ),
-                            ),
-                          ),
-                          Center(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 100),
-                              child: RichText(
-                                text: TextSpan(
-                                  style: TextStyle(color: Colors.grey[100]),
-                                  text: 'No account? ',
-                                  children: [
-                                    TextSpan(
-                                      recognizer: TapGestureRecognizer()..onTap = widget.onClickSignup,
-                                      style: TextStyle(color: Colors.green[700]),
-                                      text: 'Sign Up',
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 120),
-                            child: MaterialButton(
-                              onPressed: () async {
-
-                                doc1=false;
-                                doc2=false;
-                                cnicfromdb = " ";
-                                namefromdb=" ";
-                                servicefromdb=" ";
-                                email = oneController.text;
-                                cnic = twoController.text;
-                                password = threeController.text;
-
-                                try {
-                                  FirebaseAuth.instance.signOut();
-                                  FirebaseAuth auth = FirebaseAuth.instance;
-                                  UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                                      email: email,
-                                      password: password
-                                  );
-                                  FirebaseAuth.instance
-                                      .authStateChanges()
-                                      .listen((User? user) async {
-                                    if (user == null) {
-                                      print('User is currently signed out!');
-                                    } else {
-                                      print('User is signed in!');
-                                      DocumentSnapshot snapshot;
-                                      try {
-                                        var collectionRef1=await FirebaseFirestore.instance;
-                                        var useremailornot = collectionRef1.collection('normalusers');
-                                        await useremailornot.doc(email).get().then((doc) {
-                                          doc1 = doc.exists;
-                                        });
-                                      }
-                                      catch(e)
-                                      {
-                                      }
-                                      try {
-                                        var collectionRef2=await FirebaseFirestore.instance;
-                                        var driveremailornot = collectionRef2.collection('drivers');
-                                        await driveremailornot.doc(email).get().then((doc) {
-                                          doc2 = doc.exists;
-                                        });
-                                      }
-                                      catch(e)
-                                      {
-                                      }
-                                      if(doc1)
-                                      {
-                                        final data = await FirebaseFirestore.instance
-                                            .collection("normalusers")
-                                            .doc(email)
-                                            .get();
-                                        snapshot = data;
-                                        cnicfromdb=snapshot.get("cnic").toString();
-                                        namefromdb=snapshot.get("name").toString();
-                                      }
-                                      else if(doc2)
-                                      {
-                                        final data = await FirebaseFirestore.instance
-                                            .collection("drivers")
-                                            .doc(email)
-                                            .get();
-                                        snapshot = data;
-                                        cnicfromdb=snapshot.get("cnic").toString();
-                                        namefromdb=snapshot.get("name").toString();
-                                        servicefromdb=snapshot.get("service").toString();
-                                      }
-                                      else {
-                                        cnicfromdb = " ";
-                                        namefromdb=" ";
-                                        servicefromdb=" ";
-                                      }
-
-                                      if(cnic==cnicfromdb)
-                                      {
-                                        print(cnic+" inside"+cnicfromdb);
-                                        print("successful authentication");
-
-                                        if(doc2){
-                                          print("cnic: "+cnicfromdb+" name: "+namefromdb+" service: "+servicefromdb+" email: "+email);
-                                          Navigator.of(context).push(MaterialPageRoute( builder: (context) => Driver(),));
-                                        }
-                                        else if(doc1){
-                                          print("cnic: "+cnicfromdb+" name: "+namefromdb+" service: "+servicefromdb+" email: "+email);
-                                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => MainMenu(),));
-                                        }
-                                      }
-                                      else
-                                      {
-                                        FirebaseAuth.instance.signOut();
-                                        createsnackbar("cnic does not match with login credentials");
-
-                                      }
-                                    }
-                                  });
-                                } on FirebaseAuthException catch (e) {
-                                  if (e.code == 'user-not-found') {
-                                    createsnackbar("No user found for that email.");
-                                  } else if (e.code == 'wrong-password') {
-                                   createsnackbar("Wrong password provided for that user.");
-                                  }
-                                  else
-                                    createsnackbar("something wrong");
-
-                                }
-                              },
-                              color: Colors.green,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                //clipBehaviour: Clip.antiAliasWithSaveLayer,
-                              ),
-                              child: const Text('Log In', style: TextStyle(fontSize: 18, color: Colors.white)),
-                            ),
-                          ),
-                        ]
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/login3.jpeg'),
+              fit: BoxFit.cover,
+              colorFilter: new ColorFilter.mode(Colors.black26.withOpacity(0.8), BlendMode.dstATop),
+            ),
+          ),
+          child: Center(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              reverse: true,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.only(top:60, bottom: 30),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.green[900],
+                        radius: 100,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.grey[300],
+                          backgroundImage: AssetImage('images/pp21.png'),
+                          radius: 90,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                    Padding(padding: const EdgeInsets.symmetric(vertical:15, horizontal: 20),
+                      child: TextField(
+                        controller: oneController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: "Enter your Email",
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              oneController.clear();
+                            },
+                            icon: const Icon(Icons.clear),
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30)
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                      child: TextField(
+                        controller: twoController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: "Enter your CNIC",
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              twoController.clear();
+                            },
+                            icon: const Icon(Icons.clear),
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30)
+                          ),
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
+                    ),
+                    Padding(padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                      child: TextField(
+                        controller: threeController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: "Enter your Password",
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              threeController.clear();
+                            },
+                            icon: const Icon(Icons.clear),
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30)
+                          ),
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 100),
+                        child: RichText(
+                          text: TextSpan(
+                            style: TextStyle(color: Colors.grey[100]),
+                            text: 'No account? ',
+                            children: [
+                              TextSpan(
+                                recognizer: TapGestureRecognizer()..onTap = widget.onClickSignup,
+                                style: TextStyle(color: Colors.green[700]),
+                                text: 'Sign Up',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 120),
+                      child: MaterialButton(
+                        onPressed: () async {
+                          doc1=false;
+                          doc2=false;
+                          cnicfromdb = " ";
+                          namefromdb=" ";
+                          servicefromdb=" ";
+                          email = oneController.text;
+                          cnic = twoController.text;
+                          password = threeController.text;
+                          try {
+                            FirebaseAuth.instance.signOut();
+                            FirebaseAuth auth = FirebaseAuth.instance;
+                            UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                                email: email,
+                                password: password
+                            );
+                            FirebaseAuth.instance
+                                .authStateChanges()
+                                .listen((User? user) async {
+                              if (user == null) {
+                                print('User is currently signed out!');
+                              } else {
+                                print('User is signed in!');
+                                DocumentSnapshot snapshot;
+                                try {
+                                  var collectionRef1=await FirebaseFirestore.instance;
+                                  var useremailornot = collectionRef1.collection('normalusers');
+                                  await useremailornot.doc(email).get().then((doc) {
+                                    doc1 = doc.exists;
+                                  });
+                                }
+                                catch(e)
+                                {
+                                }
+                                try {
+                                  var collectionRef2=await FirebaseFirestore.instance;
+                                  var driveremailornot = collectionRef2.collection('drivers');
+                                  await driveremailornot.doc(email).get().then((doc) {
+                                    doc2 = doc.exists;
+                                  });
+                                }
+                                catch(e)
+                                {
+                                }
+                                if(doc1)
+                                {
+                                  final data = await FirebaseFirestore.instance
+                                      .collection("normalusers")
+                                      .doc(email)
+                                      .get();
+                                  snapshot = data;
+                                  cnicfromdb=snapshot.get("cnic").toString();
+                                  namefromdb=snapshot.get("name").toString();
+                                }
+                                else if(doc2)
+                                {
+                                  final data = await FirebaseFirestore.instance
+                                      .collection("drivers")
+                                      .doc(email)
+                                      .get();
+                                  snapshot = data;
+                                  cnicfromdb=snapshot.get("cnic").toString();
+                                  namefromdb=snapshot.get("name").toString();
+                                  servicefromdb=snapshot.get("service").toString();
+                                }
+                                else {
+                                  cnicfromdb = " ";
+                                  namefromdb=" ";
+                                  servicefromdb=" ";
+                                }
+                                if(cnic==cnicfromdb)
+                                {
+                                  print(cnic+" inside"+cnicfromdb);
+                                  print("successful authentication");
+
+                                  if(doc2){
+                                    print("cnic: "+cnicfromdb+" name: "+namefromdb+" service: "+servicefromdb+" email: "+email);
+                                    type = 'driver';
+                                    //Navigator.push(context, MaterialPageRoute( builder: (context) => Main(type: type)));
+                                    Navigator.of(context).push(MaterialPageRoute( builder: (context) => Driver(),));
+                                  }
+                                  else if(doc1){
+                                    print("cnic: "+cnicfromdb+" name: "+namefromdb+" service: "+servicefromdb+" email: "+email);
+                                    type = 'user';
+                                    //Navigator.push(context, MaterialPageRoute(builder: (context) => Main(type: type),));
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => MainMenu(),));
+                                  }
+                                }
+                                else
+                                {
+                                  FirebaseAuth.instance.signOut();
+                                  createsnackbar("cnic does not match with login credentials");
+                                }
+                              }
+                            });
+                          } on FirebaseAuthException catch (e) {
+                            if (e.code == 'user-not-found') {
+                              createsnackbar("No user found for that email.");
+                            } else if (e.code == 'wrong-password') {
+                             createsnackbar("Wrong password provided for that user.");
+                            }
+                            else
+                              createsnackbar("something wrong");
+                          }
+                        },
+                        color: Colors.green,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          //clipBehaviour: Clip.antiAliasWithSaveLayer,
+                        ),
+                        child: const Text('Log In', style: TextStyle(fontSize: 18, color: Colors.white)),
+                      ),
+                    ),
+                    Text('        '),
+                    Text('        '),
+                  ]
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -306,10 +311,10 @@ class _LoginState extends State<Login> {
   void createsnackbar(String e)
   {
     final snackBar = SnackBar(content: Text(e));
-
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
+
 class SignUp extends StatefulWidget {
   final VoidCallback onClickSignup;
   const SignUp({
@@ -351,16 +356,16 @@ class _SignUpState extends State<SignUp> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    Text(email),
-                    Text(cnic),
-                    Text(password),
-                    CircleAvatar(
-                      backgroundColor: Colors.green[900],
-                      radius: 90,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
                       child: CircleAvatar(
-                        backgroundColor: Colors.grey[300],
-                        backgroundImage: AssetImage('images/pp21.png'),
-                        radius: 80,
+                        backgroundColor: Colors.green[900],
+                        radius: 90,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.grey[300],
+                          backgroundImage: AssetImage('images/pp21.png'),
+                          radius: 80,
+                        ),
                       ),
                     ),
                     Padding(padding: const EdgeInsets.all(12),
@@ -418,13 +423,13 @@ class _SignUpState extends State<SignUp> {
                               borderRadius: BorderRadius.circular(30)
                           ),
                         ),
+                        keyboardType: TextInputType.number,
                       ),
                     ),
                     Padding(padding: const EdgeInsets.all(12),
                       child: TextField(
                         controller: fourController,
                         decoration: InputDecoration(
-
                           filled: true,
                           fillColor: Colors.white,
                           hintText: "Enter your Password",
@@ -442,7 +447,7 @@ class _SignUpState extends State<SignUp> {
                     ),
                     Center(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 100),
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 100),
                         child: RichText(
                           text: TextSpan(
                             style: TextStyle(color: Colors.grey[800]),
@@ -458,44 +463,33 @@ class _SignUpState extends State<SignUp> {
                         ),
                       ),
                     ),
-                    Padding(padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 120),
+                    Padding(padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 100),
                       child: MaterialButton(
                         onPressed: () async {
                           signupname = oneController.text;
                           signupemail = twoController.text;
                           signupcnic = threeController.text;
                           signuppassword = fourController.text;
-
-    try {
-     checkingemailbool=false;
-    var checkingemail = FirebaseFirestore.instance.collection('normalusers');
-    await checkingemail.doc(signupemail).get().then((doc) {
-    checkingemailbool = doc.exists;
-
-    });
-    } on Exception catch (e) {
-    // make it explicit that this function can throw exceptions
-
-    }
-
-
-
+                          try {
+                            checkingemailbool=false;
+                            var checkingemail = FirebaseFirestore.instance.collection('normalusers');
+                            await checkingemail.doc(signupemail).get().then((doc) {
+                              checkingemailbool = doc.exists;
+                            });
+                          } on Exception catch (e) {
+                            // make it explicit that this function can throw exceptions
+                          }
                             // showDialog(
                             //     context: context,
                             //   barrierDismissible: false,
                             //   builder: (context) => Center(child: CircularProgressIndicator(),),
                             // );
-
-                            if(!checkingemailbool)
+                            if(!checkingemailbool && signupcnic.toString().length == 13)
                             try{
-
-
                               await FirebaseAuth.instance.createUserWithEmailAndPassword(
                                 email: signupemail,
                                 password: signuppassword,
                               );
-
-
                               final signupdb = FirebaseFirestore.instance;
                               final signupdata = { "cnic":signupcnic,"name": signupname};
                               signupdb.collection("normalusers").doc(signupemail).set(signupdata);
@@ -503,11 +497,9 @@ class _SignUpState extends State<SignUp> {
                               createsnackbar(e.toString());
                             }
                             else
-                             createsnackbar("email already registered") ;
+                             createsnackbar("email already registered or CNIC invalid");
                             },
                             //navigatorKey.currentState!.popUntil((route) => route.isFirst);
-
-
                         color: Colors.green,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
@@ -527,12 +519,10 @@ class _SignUpState extends State<SignUp> {
   void createsnackbar(String e)
   {
     final snackBar = SnackBar(content: Text(e));
-
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
-
-
 }
+
 class LoginOrSignUp extends StatefulWidget {
   LoginOrSignUp({Key? key}) : super(key: key);
   @override

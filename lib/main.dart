@@ -7,14 +7,11 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_stripe/flutter_stripe.dart';
-
-
-
-
-
+import 'dart:math';
 
 void main() => runApp(
     MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: "UserPage",
       home: MainMenu(),
     ));
@@ -366,18 +363,13 @@ class _MainMenuState extends State<MainMenu> {
                         onTap: () {
                           passenger = int.parse(passengerController.text);
                           if (selectedService != null || selectedBus != null || selectedPickup != null || selectedDestination != null || passenger != 0){
-
                             //Navigator.of(context).push(MaterialPageRoute( builder: (context) => HomeScreen2(passenger: passenger,),));
-
                             if(selectedService=='Peoples Bus')
                               serviceid=1;
                             if(selectedService=='EV Bus')
                               serviceid=2;
                             if(selectedService=='Greenline Metro')
                               serviceid=3;
-
-
-
                             makePayment();
                           }//passenger: passenger
                           else{
@@ -438,15 +430,6 @@ class _MainMenuState extends State<MainMenu> {
               merchantDisplayName: 'Adnan')).then((value) {});
 
       ///now finally display payment sheet
-
-
-
-
-
-
-
-
-
       displayPaymentSheet();
     } catch (e, s) {
       print('exception:$e$s');
@@ -478,13 +461,12 @@ class _MainMenuState extends State<MainMenu> {
         // String id=data["id"];
         // var amount2=(data["amount"]/100);
         //
-
         //final data2 = {"id":id,"name": "-", "passengers":passengers.text,"date": FieldValue.serverTimestamp(),"email":"-","amount":amount2,"service":bus,"pickup":pickup,"destination":destination};
         //db.collection(bus).doc("1").set(data2);
         var id=data["id"];
         var amount2=(data["amount"]/100);
         final db = FirebaseFirestore.instance;
-        final data2 = {"id":id,"name": "-", "passengers":passenger,"date": FieldValue.serverTimestamp(),"email":"-","amount":amount2,"service":selectedService,"pickup":selectedPickup,"destination":selectedDestination,"serviceid":serviceid.toString()};
+        final data2 = {"transactionid":id,"name": "-", "passengers":passenger.toString(),"date": FieldValue.serverTimestamp(),"email":"-","amount":amount2,"busNumber":selectedBus,"pickup":selectedPickup,"destination":selectedDestination,"serviceid":serviceid.toString()};
         db.collection("tickets").doc("1").set(data2);
       }).onError((error, stackTrace) {
         print('Error is:--->$error $stackTrace');
