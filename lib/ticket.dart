@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:pakistanbusapp/main.dart';
 import 'login.dart';
 import 'menu.dart';
 
@@ -13,29 +13,27 @@ class Ticket extends StatefulWidget {
   @override
   _TicketState createState() => _TicketState(email,cnicfromdb,namefromdb,tamount,tdate,tdest,tid,tpassengers,tpickup,tserviceid,tbus,ticketnum);
 }
-//var Ticketno = 0400;
-//var name = 'Taha Hassan';
-//var date = '01/02/2023';
-var passenger = 0;
-var selectedService = 'Peoples Bus';
-var selectedBus = 'R-1';
-var selectedPickup = 'Qaidabad';
-var selectedDestination = 'Johur';
 
+var selectedService = 'Peoples Bus';
 
 void main() {
-  const oneMinute = Duration(seconds: 2);
-  Timer.periodic(oneMinute, (Timer t) {
-    print("ali");
-  });
-
-  runApp(Ticket());}
+  runApp(Ticket());
+}
 class _TicketState extends State<Ticket> {
-  String email,cnicfromdb,namefromdb,tamount,tdate,tdest,tid,tpassengers,tpickup,tserviceid,tbus;
-  int ticketnum;
+  String email,cnicfromdb,namefromdb,tamount,tdate,tdest,tid,tpassengers,tpickup,tserviceid,tbus,ticketnum;
+  String serviceImage = 'images/login31.jpeg';
   _TicketState(this.email,this.cnicfromdb,this.namefromdb,this.tamount,this.tdate,this.tdest,this.tid,this.tpassengers,this.tpickup,this.tserviceid,this.tbus,this.ticketnum);
   @override
   Widget build(BuildContext context) {
+    if (serviceid == '1'){
+      serviceImage = 'images/peoplesbus.jpg';
+    }
+    else if (serviceid == '2'){
+      serviceImage = 'images/evbus.jpg';
+    }
+    else if (serviceid == '3'){
+      serviceImage = 'images/login31.jpeg';
+    }
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -43,10 +41,9 @@ class _TicketState extends State<Ticket> {
           centerTitle: true,
           backgroundColor: Colors.green[900],
         ),
-
         body: Container(
           decoration: BoxDecoration(
-            image: DecorationImage(image: AssetImage('images/login31.jpeg'),
+            image: DecorationImage(image: AssetImage(serviceImage),
               fit: BoxFit.cover, colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.85), BlendMode.dstATop),
             ),
           ),
@@ -118,7 +115,7 @@ class _TicketState extends State<Ticket> {
                                                 Text('Pick Up: ',
                                                   style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
                                                 ),
-                                                Text( selectedPickup,
+                                                Text( tpickup,
                                                   style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
                                                 ),
                                               ]
@@ -131,7 +128,7 @@ class _TicketState extends State<Ticket> {
                                                 Text('Destination: ',
                                                   style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
                                                 ),
-                                                Text( selectedDestination,
+                                                Text( tdest,
                                                   style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
                                                 ),
                                               ]
@@ -144,7 +141,7 @@ class _TicketState extends State<Ticket> {
                                                 Text('Passengers: ',
                                                   style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
                                                 ),
-                                                Text( '$passenger',
+                                                Text( '$tpassengers',
                                                   style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
                                                 ),
                                               ]
@@ -170,7 +167,7 @@ class _TicketState extends State<Ticket> {
                                                 Text('Bus No: ',
                                                   style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
                                                 ),
-                                                Text( selectedBus,
+                                                Text( tbus,
                                                   style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
                                                 ),
                                               ]

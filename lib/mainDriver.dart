@@ -28,7 +28,7 @@ class Driver extends StatefulWidget {
 }
 
 class _DriverState extends State<Driver> {
-  final myID = '3';
+  final myID = '1';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -69,10 +69,10 @@ class _DriverState extends State<Driver> {
                             itemBuilder: (context, index) {
                               Map<String, dynamic> ticketMap = snapshot.data!.docs[index].data() as Map<String, dynamic>;
                               if (myID == ticketMap['serviceid']){
-                                final Ticketno = ticketMap['ticketid'];
+                                final Ticketno = ticketMap['ticketnum'];
                                 final name = ticketMap['name'];
                                 final DateTime now = new DateTime.now();
-                                final date = '02/03/2023';//now.toString();
+                                final date = ticketMap['date'];//now.toString();
                                 final passenger = ticketMap['passengers'];
                                 final selectedBus = ticketMap['busNumber'];
                                 final selectedPickup = ticketMap['pickup'];
