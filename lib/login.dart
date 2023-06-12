@@ -255,7 +255,7 @@ class _LoginState extends State<Login> {
 
                                         if(doc2){
                                          // print("cnic: "+cnicfromdb+" name: "+namefromdb+" service: "+servicefromdb+" email: "+email);
-                                          Navigator.of(context).push(MaterialPageRoute( builder: (context) => Driver(),));
+                                         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Driver()), (_) => false);
                                         }
                                         else if(doc1){
                                          // print("cnic: "+cnicfromdb+" name: "+namefromdb+" service: "+servicefromdb+" email: "+email);
