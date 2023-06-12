@@ -11,12 +11,6 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'dart:math';
 
-
-
-
-
-
-
 void main() => runApp(
     MaterialApp(
       title: "UserPage",
@@ -24,7 +18,7 @@ void main() => runApp(
     ));
 class MainMenu extends StatefulWidget {
   late var email,cnicfromdb,namefromdb;
- MainMenu({Key? key,@required this.email,@required this.cnicfromdb,@required this.namefromdb}) : super(key: key);
+  MainMenu({Key? key,@required this.email,@required this.cnicfromdb,@required this.namefromdb}) : super(key: key);
   @override
   _MainMenuState createState() => _MainMenuState(email,cnicfromdb,namefromdb);
 }
@@ -373,18 +367,13 @@ class _MainMenuState extends State<MainMenu> {
                         onTap: () {
                           passenger = int.parse(passengerController.text);
                           if (selectedService != null || selectedBus != null || selectedPickup != null || selectedDestination != null || passenger != 0){
-
                             //Navigator.of(context).push(MaterialPageRoute( builder: (context) => HomeScreen2(passenger: passenger,),));
-
                             if(selectedService=='Peoples Bus')
                               serviceid=1;
                             if(selectedService=='EV Bus')
                               serviceid=2;
                             if(selectedService=='Greenline Metro')
                               serviceid=3;
-
-
-
                             makePayment();
                           }//passenger: passenger
                           else{
@@ -427,7 +416,6 @@ class _MainMenuState extends State<MainMenu> {
       ),
     );
   }
-
   Future<void> makePayment() async {
     try {
       // WidgetsFlutterBinding.ensureInitialized();
@@ -443,17 +431,7 @@ class _MainMenuState extends State<MainMenu> {
               // googlePay: const PaymentSheetGooglePay(testEnv: true, currencyCode: "US", merchantCountryCode: "+92"),
               style: ThemeMode.dark,
               merchantDisplayName: 'Adnan')).then((value) {});
-
       ///now finally display payment sheet
-
-
-
-
-
-
-
-
-
       displayPaymentSheet();
     } catch (e, s) {
       print('exception:$e$s');
@@ -481,11 +459,9 @@ class _MainMenuState extends State<MainMenu> {
                 ));
         // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("paid successfully")));
         paymentIntent = null;
-
         // String id=data["id"];
         // var amount2=(data["amount"]/100);
         //
-
         //final data2 = {"id":id,"name": "-", "passengers":passengers.text,"date": FieldValue.serverTimestamp(),"email":"-","amount":amount2,"service":bus,"pickup":pickup,"destination":destination};
         //db.collection(bus).doc("1").set(data2);
         var id=data["id"];
@@ -494,17 +470,12 @@ class _MainMenuState extends State<MainMenu> {
         final db = FirebaseFirestore.instance;
         DateTime dateToday =new DateTime.now();
         String currentdate = dateToday.toString().substring(0,10);
-
         Random random = new Random();
-
         int ticketnum = random.nextInt(9000) + 100;
         String ticketnumstring=ticketnum.toString();
-
         final data2 = {"id":id,"name": namefromdb, "passengers":passenger,"date":currentdate ,"email":email,"amount":amount2,"pickup":selectedPickup,"destination":selectedDestination,"serviceid":serviceid.toString(),"busNumber":selectedBus,"ticketnum":ticketnumstring};
         print(idstring.codeUnits);
         db.collection("tickets").doc(cnicfromdb).set(data2);
-
-
         DocumentSnapshot snapshot;
         var ticketdata=await FirebaseFirestore.instance.collection('tickets').doc(cnicfromdb).get();
         snapshot=ticketdata;
@@ -516,9 +487,7 @@ class _MainMenuState extends State<MainMenu> {
         var tpickup=snapshot.get("pickup").toString();
         var tserviceid=snapshot.get("serviceid").toString();
         var tbus=snapshot.get("busNumber").toString();
-         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Ticket(email:email,cnicfromdb:cnicfromdb,namefromdb:namefromdb,tamount:tamount,tdate:tdate,tdest:tdest,tid:tid,tpickup:tpickup,tpassengers:tpassengers,tserviceid:tserviceid,tbus:tbus,ticketnum: ticketnumstring)), (_) => false);
-
-
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Ticket(email:email,cnicfromdb:cnicfromdb,namefromdb:namefromdb,tamount:tamount,tdate:tdate,tdest:tdest,tid:tid,tpickup:tpickup,tpassengers:tpassengers,tserviceid:tserviceid,tbus:tbus,ticketnum: ticketnumstring)), (_) => false);
       }).onError((error, stackTrace) {
         print('Error is:--->$error $stackTrace');
       });
