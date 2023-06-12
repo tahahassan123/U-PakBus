@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pakistanbusapp/main.dart';
+import 'package:pakistanbusapp/ticket.dart';
+
 import 'mainDriver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -16,12 +18,14 @@ Future<void> main() async {
   Stripe.publishableKey = 'pk_test_51NCzkJI3GjRc0k0GRc5SfTIoeaHzyaYirzzindw9IkPdbw7la71lCzcx26PDJw4LPhajCk9zqrjarb2Hhxdq5t0D00QNf1VOpH';
   await Firebase.initializeApp(
   );
+
+  collectionref4=await FirebaseFirestore.instance;
   runApp(MaterialApp(
     title: "LoginPage",
     home: Main(),
   ));}
 
-var signupemail,signupname,signupcnic,signuppassword;
+var signupemail,signupname,signupcnic,signuppassword,collectionref4;
 
 class Main extends StatelessWidget{
   const Main({super.key});
@@ -30,18 +34,7 @@ class Main extends StatelessWidget{
     body: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot){
-          if (snapshot.connectionState == ConnectionState.waiting){
-            return Center(child: CircularProgressIndicator(),);
-          }
-          else if (snapshot.hasError){
-            return Center(child: Text('Something went wrong!'),);
-          }
-          else if (snapshot.hasData){
-            return MainMenu();
-          }
-          else{
-            return LoginOrSignUp();
-          }
+          return LoginOrSignUp();
         }
     ),
   );
@@ -179,6 +172,10 @@ class _LoginState extends State<Login> {
                           Padding(padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 120),
                             child: MaterialButton(
                               onPressed: () async {
+                                bool boolcnicinticket=false;
+                                var collectionref4;
+
+                                var tamount,tdate,tdest,tid,tpassengers,tpickup,tserviceid,tbus,ticketnum;
 
                                 doc1=false;
                                 doc2=false;
@@ -257,12 +254,40 @@ class _LoginState extends State<Login> {
                                         print("successful authentication");
 
                                         if(doc2){
-                                          print("cnic: "+cnicfromdb+" name: "+namefromdb+" service: "+servicefromdb+" email: "+email);
+                                         // print("cnic: "+cnicfromdb+" name: "+namefromdb+" service: "+servicefromdb+" email: "+email);
                                           Navigator.of(context).push(MaterialPageRoute( builder: (context) => Driver(),));
                                         }
                                         else if(doc1){
-                                          print("cnic: "+cnicfromdb+" name: "+namefromdb+" service: "+servicefromdb+" email: "+email);
-                                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => MainMenu(),));
+                                         // print("cnic: "+cnicfromdb+" name: "+namefromdb+" service: "+servicefromdb+" email: "+email);
+                                          try {
+                                            var collectionRef3=await FirebaseFirestore.instance;
+                                             var cnicinticketsornot = collectionRef3.collection('tickets');
+
+                                            await cnicinticketsornot.doc(cnicfromdb).get().then((doc) {
+                                              boolcnicinticket = doc.exists;
+                                            });
+                                          }
+                                          catch(e)
+                                          {
+                                          }
+
+                                          if(boolcnicinticket){
+                                            DocumentSnapshot snapshot;
+                                            var ticketdata=await FirebaseFirestore.instance.collection('tickets').doc(cnicfromdb).get();
+                                            snapshot=ticketdata;
+                                          tamount=snapshot.get("amount").toString();
+                                           tdate=snapshot.get("date").toString();
+                                           tdest=snapshot.get("destination").toString();
+                                           tid=snapshot.get("id").toString();
+                                          tpassengers=snapshot.get("passengers").toString();
+                                          tpickup=snapshot.get("pickup").toString();
+                                           tserviceid=snapshot.get("serviceid").toString();
+                                           tbus=snapshot.get("busNumber").toString();
+                                           ticketnum=snapshot.get("ticketnum").toString();
+                                            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Ticket(email:email,cnicfromdb:cnicfromdb,namefromdb:namefromdb,tamount:tamount,tdate:tdate,tdest:tdest,tid:tid,tpickup:tpickup,tpassengers:tpassengers,tserviceid:tserviceid,tbus:tbus,ticketnum: ticketnum,)), (_) => false);}
+
+                                          else
+                                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MainMenu(email:email,cnicfromdb:cnicfromdb,namefromdb:namefromdb)), (_) => false);
                                         }
                                       }
                                       else
@@ -499,6 +524,14 @@ class _SignUpState extends State<SignUp> {
                               final signupdb = FirebaseFirestore.instance;
                               final signupdata = { "cnic":signupcnic,"name": signupname};
                               signupdb.collection("normalusers").doc(signupemail).set(signupdata);
+                              createsnackbar("ACCOUNT SUCCESSFULLY CREATED , NOW YOU CAN LOGIN");
+                              oneController.clear();
+                              twoController.clear();
+                              threeController.clear();
+                              fourController.clear();
+                              display();
+
+
                             } on FirebaseAuthException catch (e) {
                               createsnackbar(e.toString());
                             }
@@ -530,6 +563,30 @@ class _SignUpState extends State<SignUp> {
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+  void display() {
+
+
+
+
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Main()), (_) => false);
+        // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("paid successfully")));
+
+
+        // String id=data["id"];
+        // var amount2=(data["amount"]/100);
+        //
+
+        //final data2 = {"id":id,"name": "-", "passengers":passengers.text,"date": FieldValue.serverTimestamp(),"email":"-","amount":amount2,"service":bus,"pickup":pickup,"destination":destination};
+        //db.collection(bus).doc("1").set(data2);
+
+
+
+
+
+
+
+      }
 
 
 }
