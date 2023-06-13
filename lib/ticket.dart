@@ -17,18 +17,24 @@ class Ticket extends StatefulWidget {
 var selectedService = 'Peoples Bus'; //dummy data
 
 void main() {
-  const oneMinute = Duration(seconds: 2);
-  Timer.periodic(oneMinute, (Timer t) {
-    print("ali");
-  });
+  runApp(Ticket());
+}
 
-  runApp(Ticket());}
 class _TicketState extends State<Ticket> {
   String email,cnicfromdb,namefromdb,tamount,tdate,tdest,tid,tpassengers,tpickup,tserviceid,tbus,ticketnum;
-
+  String serviceImage = 'images/login31.jpeg';
   _TicketState(this.email,this.cnicfromdb,this.namefromdb,this.tamount,this.tdate,this.tdest,this.tid,this.tpassengers,this.tpickup,this.tserviceid,this.tbus,this.ticketnum);
   @override
   Widget build(BuildContext context) {
+    if (tserviceid == '1'){
+      serviceImage = 'images/peoplesbus.jpg';
+    }
+    else if (tserviceid == '2'){
+      serviceImage = 'images/evbus.jpg';
+    }
+    else if (tserviceid == '3'){
+      serviceImage = 'images/login31.jpeg';
+    }
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -46,8 +52,8 @@ class _TicketState extends State<Ticket> {
         ),
         body: Container(
           decoration: BoxDecoration(
-            image: DecorationImage(image: AssetImage('images/login31.jpeg'),
-              fit: BoxFit.cover, colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.85), BlendMode.dstATop),
+            image: DecorationImage(image: AssetImage(serviceImage),
+              fit: BoxFit.cover, colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.75), BlendMode.dstATop),
             ),
           ),
           child: Column(
@@ -76,107 +82,109 @@ class _TicketState extends State<Ticket> {
                           children: [
                             Container(
                               width: 450,
-                              height: 470,
+                              height: 500,
                               child: Stack(
                                   children: [
                                     Image.asset('images/ticket2.jpg',
                                       fit: BoxFit.cover,
                                       //opacity: const AlwaysStoppedAnimation(.8),
                                     ),
-                                    Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                                          child: Row(
-                                              children: [
-                                                Text('Holder: ',
-                                                  style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
-                                                ),
-                                                Text( namefromdb,
-                                                  style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
-                                                ),
-                                              ]
+                                    SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                                            child: Row(
+                                                children: [
+                                                  Text('Holder: ',
+                                                    style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                                                  ),
+                                                  Text( namefromdb,
+                                                    style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
+                                                  ),
+                                                ]
+                                            ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
-                                          child: Row(
-                                              children: [
-                                                Text('Purchased On: ',
-                                                  style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
-                                                ),
-                                                Text( tdate,
-                                                  style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
-                                                ),
-                                              ]
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
+                                            child: Row(
+                                                children: [
+                                                  Text('Purchased On: ',
+                                                    style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                                                  ),
+                                                  Text( tdate,
+                                                    style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
+                                                  ),
+                                                ]
+                                            ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
-                                          child: Row(
-                                              children: [
-                                                Text('Pick Up: ',
-                                                  style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
-                                                ),
-                                                Text( tpickup,
-                                                  style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
-                                                ),
-                                              ]
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
+                                            child: Row(
+                                                children: [
+                                                  Text('Pick Up: ',
+                                                    style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                                                  ),
+                                                  Text( tpickup,
+                                                    style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
+                                                  ),
+                                                ]
+                                            ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
-                                          child: Row(
-                                              children: [
-                                                Text('Destination: ',
-                                                  style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
-                                                ),
-                                                Text( tdest,
-                                                  style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
-                                                ),
-                                              ]
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
+                                            child: Row(
+                                                children: [
+                                                  Text('Destination: ',
+                                                    style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                                                  ),
+                                                  Text( tdest,
+                                                    style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
+                                                  ),
+                                                ]
+                                            ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
-                                          child: Row(
-                                              children: [
-                                                Text('Passengers: ',
-                                                  style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
-                                                ),
-                                                Text( '$tpassengers',
-                                                  style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
-                                                ),
-                                              ]
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
+                                            child: Row(
+                                                children: [
+                                                  Text('Passengers: ',
+                                                    style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                                                  ),
+                                                  Text( '$tpassengers',
+                                                    style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
+                                                  ),
+                                                ]
+                                            ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
-                                          child: Row(
-                                              children: [
-                                                Text('Service: ',
-                                                  style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
-                                                ),
-                                                Text( selectedService,
-                                                  style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
-                                                ),
-                                              ]
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
+                                            child: Row(
+                                                children: [
+                                                  Text('Service: ',
+                                                    style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                                                  ),
+                                                  Text( selectedService,
+                                                    style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
+                                                  ),
+                                                ]
+                                            ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
-                                          child: Row(
-                                              children: [
-                                                Text('Bus No: ',
-                                                  style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
-                                                ),
-                                                Text( tbus,
-                                                  style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
-                                                ),
-                                              ]
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
+                                            child: Row(
+                                                children: [
+                                                  Text('Bus No: ',
+                                                    style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                                                  ),
+                                                  Text( tbus,
+                                                    style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
+                                                  ),
+                                                ]
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ]
                               ),

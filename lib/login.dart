@@ -490,7 +490,7 @@ class _SignUpState extends State<SignUp> {
                               final signupdb = FirebaseFirestore.instance;
                               final signupdata = { "cnic":signupcnic,"name": signupname};
                               signupdb.collection("normalusers").doc(signupemail).set(signupdata);
-                              createsnackbar("ACCOUNT SUCCESSFULLY CREATED , NOW YOU CAN LOGIN");
+                              createsnackbar("Account Successfully created! You May now Login!");
                               oneController.clear();
                               twoController.clear();
                               threeController.clear();
