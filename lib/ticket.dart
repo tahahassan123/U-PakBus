@@ -51,6 +51,7 @@ class _TicketState extends State<Ticket> {
             ]
         ),
         body: Container(
+          width: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(image: AssetImage(serviceImage),
               fit: BoxFit.cover, colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.75), BlendMode.dstATop),
