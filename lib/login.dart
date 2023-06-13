@@ -53,6 +53,12 @@ class _LoginState extends State<Login> {
   String password = '';
   bool doc1=false,doc2=false;
   String cnicfromdb=" ",servicefromdb=" ",namefromdb=" ";
+  bool passwordVisible = false;
+  @override
+  void initState(){
+    super.initState();
+    passwordVisible = true;
+  }
   //async {}
   @override
   Widget build(BuildContext context){
@@ -126,16 +132,21 @@ class _LoginState extends State<Login> {
                     ),
                     Padding(padding: const EdgeInsets.all(15),
                       child: TextField(
+                        obscureText: passwordVisible,
                         controller: threeController,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
                           hintText: "Enter your Password",
                           suffixIcon: IconButton(
+                            icon: Icon(passwordVisible? Icons.visibility: Icons.visibility_off),
                             onPressed: () {
-                              threeController.clear();
+                              setState(() {
+                                passwordVisible = !passwordVisible;
+                              });
+                              //fourController.clear();
                             },
-                            icon: const Icon(Icons.clear),
+                            //icon: const Icon(Icons.clear),
                           ),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30)
@@ -331,6 +342,12 @@ class _SignUpState extends State<SignUp> {
   String cnic = '';
   String password = '';
   String username = '';
+  bool passwordVisible = false;
+  @override
+  void initState(){
+    super.initState();
+    passwordVisible = true;
+  }
   //async {}
   @override
   Widget build(BuildContext context){
@@ -425,16 +442,21 @@ class _SignUpState extends State<SignUp> {
                     ),
                     Padding(padding: const EdgeInsets.all(12),
                       child: TextField(
+                        obscureText: passwordVisible,
                         controller: fourController,
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
                           hintText: "Enter your Password",
                           suffixIcon: IconButton(
+                            icon: Icon(passwordVisible? Icons.visibility: Icons.visibility_off),
                             onPressed: () {
-                              fourController.clear();
+                              setState(() {
+                                passwordVisible = !passwordVisible;
+                              });
+                              //fourController.clear();
                             },
-                            icon: const Icon(Icons.clear),
+                            //icon: const Icon(Icons.clear),
                           ),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30)
