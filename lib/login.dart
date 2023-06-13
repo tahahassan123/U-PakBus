@@ -237,7 +237,7 @@ class _LoginState extends State<Login> {
                                   snapshot = data;
                                   cnicfromdb=snapshot.get("cnic").toString();
                                   namefromdb=snapshot.get("name").toString();
-                                  servicefromdb=snapshot.get("service").toString();
+                                  servicefromdb=snapshot.get("serviceid").toString();
                                 }
                                 else {
                                   cnicfromdb = " ";

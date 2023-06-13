@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'menu.dart';
+import 'login.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -255,6 +256,7 @@ class _DriverState extends State<Driver> {
     switch (item) {
       case MenuItems.itemLogout:
         FirebaseAuth.instance.signOut();
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Main()), (_) => false);
         break;
     }
   }
