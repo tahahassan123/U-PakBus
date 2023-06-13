@@ -137,7 +137,7 @@ class _MainMenuState extends State<MainMenu> {
                             child:Text("Service",  style: TextStyle(fontWeight:FontWeight.bold,fontSize: 18),),
                           ),
                           Container(
-                            width: 200,
+                            width: double.infinity,
                             height: 40,
                             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2,),
                             decoration: BoxDecoration(
