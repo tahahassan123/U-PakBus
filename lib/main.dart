@@ -115,6 +115,7 @@ class _MainMenuState extends State<MainMenu> {
           ],
         ),
         body: Container(
+          width: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(image: AssetImage('images/mainmenu2.jpg'),
               fit: BoxFit.cover, colorFilter: new ColorFilter.mode(Colors.green.withOpacity(0.3), BlendMode.dstATop),

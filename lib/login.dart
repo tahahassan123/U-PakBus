@@ -66,6 +66,7 @@ class _LoginState extends State<Login> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Container(
+          width: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage('images/login3.jpeg'),
@@ -356,6 +357,7 @@ class _SignUpState extends State<SignUp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Container(
+          width: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage('images/login3.jpeg'),
