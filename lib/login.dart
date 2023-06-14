@@ -156,8 +156,14 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     Center(
+                      child: GestureDetector(
+                        child: Text("Forgot Password?", style: TextStyle(fontSize: 12,color: Colors.blue, decoration: TextDecoration.underline),),
+                        onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => ForgotPassword())),
+                      ),
+                    ),
+                    Center(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 100),
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 100),
                         child: RichText(
                           text: TextSpan(
                             style: TextStyle(color: Colors.grey[900]),
@@ -165,7 +171,7 @@ class _LoginState extends State<Login> {
                             children: [
                               TextSpan(
                                 recognizer: TapGestureRecognizer()..onTap = widget.onClickSignup,
-                                style: TextStyle(color: Colors.green[700]),
+                                style: TextStyle(color: Colors.green[700], decoration: TextDecoration.underline),
                                 text: 'Sign Up',
                               ),
                             ],
@@ -250,8 +256,13 @@ class _LoginState extends State<Login> {
                                   print(cnic+" inside"+cnicfromdb);
                                   print("successful authentication");
                                   if(doc2){
+                                    DocumentSnapshot snapshot2;
+                                    var data=await FirebaseFirestore.instance.collection('drivers').doc(email).get();
+                                    snapshot2=data;
+                                    final myID = snapshot2.get("serviceid");
                                     // print("cnic: "+cnicfromdb+" name: "+namefromdb+" service: "+servicefromdb+" email: "+email);
-                                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Driver()), (_) => false);
+                                    // print("cnic: "+cnicfromdb+" name: "+namefromdb+" service: "+servicefromdb+" email: "+email);
+                                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Driver(myID: myID)), (_) => false);
                                   }
                                   else if(doc1){
                                     // print("cnic: "+cnicfromdb+" name: "+namefromdb+" service: "+servicefromdb+" email: "+email);
@@ -357,7 +368,6 @@ class _SignUpState extends State<SignUp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         body: Container(
-          width: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage('images/login3.jpeg'),
@@ -468,7 +478,7 @@ class _SignUpState extends State<SignUp> {
                     ),
                     Center(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 100),
+                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 85),
                         child: RichText(
                           text: TextSpan(
                             style: TextStyle(color: Colors.white),
@@ -476,7 +486,7 @@ class _SignUpState extends State<SignUp> {
                             children: [
                               TextSpan(
                                 recognizer: TapGestureRecognizer()..onTap = widget.onClickSignup,
-                                style: TextStyle(color: Colors.green[600]),
+                                style: TextStyle(color: Colors.green[600], decoration: TextDecoration.underline),
                                 text: 'Login',
                               ),
                             ],
@@ -500,11 +510,7 @@ class _SignUpState extends State<SignUp> {
                           } on Exception catch (e) {
                             // make it explicit that this function can throw exceptions
                           }
-                          // showDialog(
-                          //     context: context,
-                          //   barrierDismissible: false,
-                          //   builder: (context) => Center(child: CircularProgressIndicator(),),
-                          // );
+
                           if(!checkingemailbool && signupcnic.toString().length == 13)
                             try{
                               await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -575,9 +581,95 @@ class _LoginOrSignUpState extends State<LoginOrSignUp> {
   void toggle() => setState(() => login = !login);
 }
 
-class DefaultFirebaseOptions {
+class ForgotPassword extends StatefulWidget {
+  ForgotPassword({Key? key}) : super(key: key);
+  @override
+  _ForgotPasswordState createState() => _ForgotPasswordState();
 }
 
+class _ForgotPasswordState extends State<ForgotPassword> {
+  bool login = true;
+  final resetController = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        // appBar: AppBar(
+        //   backgroundColor: Colors.green[900],
+        //   title: Text('Reset Your Password'),
+        //   centerTitle: true,
+        // ),
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/UPakBusFbackground.png'),
+              fit: BoxFit.cover,
+              colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.9), BlendMode.dstATop),
+            ),
+          ),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: TextField(
+                      controller: resetController,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: "Enter your Email",
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            resetController.clear();
+                          },
+                          icon: const Icon(Icons.clear),
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30)
+                        ),
+                      ),
+                    ),
+                  ),
+                  MaterialButton(
+                    onPressed: () {verifyEmail();},
+                    color: Colors.green,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)
+                    ),
+                    child: const Text('Reset Password', style: TextStyle(color: Colors.white, fontSize: 15),),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+  Future verifyEmail() async{
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Center(child: CircularProgressIndicator(),),
+    );
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+          email: resetController.text.trim()
+      );
+      Navigator.of(context).pop((route) => route.isFirst);
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar( content: Text("Reset Email Sent!"), duration: Duration(milliseconds: 1700), ), );
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar( SnackBar( content: Text(e as String), duration: Duration(milliseconds: 1500), ), );
+    }
+    Navigator.of(context).pop();
+  }
+}
+
+class DefaultFirebaseOptions {
+}
 
 
 

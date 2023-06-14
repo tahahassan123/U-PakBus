@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'dart:math';
+import 'package:flutter_mailer/flutter_mailer.dart';
 
 void main() => runApp(
     MaterialApp(
@@ -115,7 +116,6 @@ class _MainMenuState extends State<MainMenu> {
           ],
         ),
         body: Container(
-          width: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(image: AssetImage('images/mainmenu2.jpg'),
               fit: BoxFit.cover, colorFilter: new ColorFilter.mode(Colors.green.withOpacity(0.3), BlendMode.dstATop),
@@ -128,112 +128,115 @@ class _MainMenuState extends State<MainMenu> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   SizedBox(height: 23,),
-                  Row(
-                    children: [
-                      Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child:Text("Service",  style: TextStyle(fontWeight:FontWeight.bold,fontSize: 18),),
-                          ),
-                          Container(
-                            width: double.infinity,
-                            height: 40,
-                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2,),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.green, width: 4),
-                                borderRadius: BorderRadius.circular(20)
-                            ),
-                            child: DropdownButton(
-                              isExpanded: true,
-                              value: selectedService,
-                              onChanged: (newValue){
-                                setState(() {
-                                  Destination=[];
-                                  Pickup=[];
-                                  Bus=[];
-                                  if (newValue == 'Peoples Bus'){
-                                    busImage = 'images/peoplesbus.jpg';
-                                  };
-                                  if (newValue == 'EV Bus'){
-                                    busImage = 'images/evbus.jpg';
-                                  };
-                                  if (newValue == 'Greenline Metro'){
-                                    busImage = 'images/greenline.jpg';
-                                  };
-                                  BusDropDown(service[newValue]);
-                                  selectedService="$newValue";
-                                  print(selectedService);
-                                });
-                              },
-                              items: Service.map((service){
-                                return DropdownMenuItem(
-                                  child: new Text(service),
-                                  value:service,
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(width: 15,),
-                      Column(
-                        children: [
-                          Align(
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Column(
+                          children: [
+                            Align(
                               alignment: Alignment.topLeft,
-                              child:Text("Bus Number", style: TextStyle(fontWeight:FontWeight.bold,fontSize: 18),)
-                          ),
-                          Container(
-                            width: 155,
-                            height: 40,
-                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2,),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.green, width: 4),
-                                borderRadius: BorderRadius.circular(20)
+                              child:Text("Service",  style: TextStyle(fontWeight:FontWeight.bold,fontSize: 18),),
                             ),
-                            child: DropdownButton(
-                              isExpanded: true,
-                              value: selectedBus,
-                              onChanged: (newValue){
-                                print(newValue);
-                                setState(() {
+                            Container(
+                              width: 200,
+                              height: 40,
+                              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2,),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.green, width: 4),
+                                  borderRadius: BorderRadius.circular(20)
+                              ),
+                              child: DropdownButton(
+                                isExpanded: true,
+                                value: selectedService,
+                                onChanged: (newValue){
+                                  setState(() {
+                                    Destination=[];
+                                    Pickup=[];
+                                    Bus=[];
+                                    if (newValue == 'Peoples Bus'){
+                                      busImage = 'images/peoplesbus.jpg';
+                                    };
+                                    if (newValue == 'EV Bus'){
+                                      busImage = 'images/evbus.jpg';
+                                    };
+                                    if (newValue == 'Greenline Metro'){
+                                      busImage = 'images/greenline.jpg';
+                                    };
+                                    BusDropDown(service[newValue]);
+                                    selectedService="$newValue";
+                                    print(selectedService);
+                                  });
+                                },
+                                items: Service.map((service){
+                                  return DropdownMenuItem(
+                                    child: new Text(service),
+                                    value:service,
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 15,),
+                        Column(
+                          children: [
+                            Align(
+                                alignment: Alignment.topLeft,
+                                child:Text("Bus Number", style: TextStyle(fontWeight:FontWeight.bold,fontSize: 18),)
+                            ),
+                            Container(
+                              width: 155,
+                              height: 40,
+                              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2,),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.green, width: 4),
+                                  borderRadius: BorderRadius.circular(20)
+                              ),
+                              child: DropdownButton(
+                                isExpanded: true,
+                                value: selectedBus,
+                                onChanged: (newValue){
                                   print(newValue);
-                                  Pickup=[];
-                                  Destination=[];
-                                  if (newValue == 'R-1'){
-                                    routeImage = 'images/r1.jpg';
-                                  };
-                                  if (newValue == 'R-2'){
-                                    routeImage = 'images/r2.jpg';
-                                    routeHeight = 450;
-                                  }
-                                  else{
-                                    routeHeight = 250;
-                                  }
-                                  if (newValue == 'BRT'){
-                                    routeImage = 'images/brt.jpg';
-                                  }
-                                  else{
-                                    if (newValue == 'R-3' || newValue == 'R-4'|| newValue == 'EV-1'|| newValue == 'EV-2'){
-                                      routeImage = 'images/peoples_ev_routes.jpg';
+                                  setState(() {
+                                    print(newValue);
+                                    Pickup=[];
+                                    Destination=[];
+                                    if (newValue == 'R-1'){
+                                      routeImage = 'images/r1.jpg';
+                                    };
+                                    if (newValue == 'R-2'){
+                                      routeImage = 'images/r2.jpg';
+                                      routeHeight = 450;
                                     }
-                                  }
-                                  PickupDropDown(newValue);
-                                  DestinationDropDown(newValue);
-                                  selectedBus="$newValue";
-                                });
-                              },
-                              items:Bus.map((bus){
-                                return DropdownMenuItem(
-                                  child: new Text(bus),
-                                  value:bus,
-                                );
-                              }).toList(),
+                                    else{
+                                      routeHeight = 250;
+                                    }
+                                    if (newValue == 'BRT'){
+                                      routeImage = 'images/brt.jpg';
+                                    }
+                                    else{
+                                      if (newValue == 'R-3' || newValue == 'R-4'|| newValue == 'EV-1'|| newValue == 'EV-2'){
+                                        routeImage = 'images/peoples_ev_routes.jpg';
+                                      }
+                                    }
+                                    PickupDropDown(newValue);
+                                    DestinationDropDown(newValue);
+                                    selectedBus="$newValue";
+                                  });
+                                },
+                                items:Bus.map((bus){
+                                  return DropdownMenuItem(
+                                    child: new Text(bus),
+                                    value:bus,
+                                  );
+                                }).toList(),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(25),
@@ -249,78 +252,81 @@ class _MainMenuState extends State<MainMenu> {
                         )
                     ),
                   ),
-                  Row(
-                    children: [
-                      Column(
-                        children: [
-                          Align(
-                              alignment: Alignment.bottomLeft,
-                              child:Text("Pickup At", style: TextStyle(fontWeight:FontWeight.bold,fontSize: 18),)
-                          ),
-                          Container(
-                            width: 175,
-                            height: 50,
-                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2,),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.green, width: 4),
-                                borderRadius: BorderRadius.circular(25)
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Column(
+                          children: [
+                            Align(
+                                alignment: Alignment.bottomLeft,
+                                child:Text("Pickup At", style: TextStyle(fontWeight:FontWeight.bold,fontSize: 18),)
                             ),
-                            child: DropdownButton(
-                              isExpanded: true,
-                              value: selectedPickup,
-                              onChanged: (newValue){
-                                setState(() {
-                                  selectedPickup="$newValue";
-                                });
-                              },
-                              items:Pickup.map((pickup){
-                                return DropdownMenuItem(
-                                  child: new Text(pickup),
-                                  value:pickup,
-                                );
-                              }).toList(),
+                            Container(
+                              width: 175,
+                              height: 50,
+                              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2,),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.green, width: 4),
+                                  borderRadius: BorderRadius.circular(25)
+                              ),
+                              child: DropdownButton(
+                                isExpanded: true,
+                                value: selectedPickup,
+                                onChanged: (newValue){
+                                  setState(() {
+                                    selectedPickup="$newValue";
+                                  });
+                                },
+                                items:Pickup.map((pickup){
+                                  return DropdownMenuItem(
+                                    child: new Text(pickup),
+                                    value:pickup,
+                                  );
+                                }).toList(),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 20,
-                        height: 25,
-                        child: Center(child: Text("To", style: TextStyle(fontSize: 15,),)),
-                      ),
-                      Column(
-                        children: [
-                          Align(
-                              alignment: Alignment.centerLeft,
-                              child:Text("Destination", style: TextStyle(fontWeight:FontWeight.bold,fontSize: 18),)
-                          ),
-                          Container(
-                            width: 175,
-                            height: 50,
-                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2,),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.green, width: 4),
-                                borderRadius: BorderRadius.circular(25)
+                          ],
+                        ),
+                        SizedBox(
+                          width: 20,
+                          height: 25,
+                          child: Center(child: Text("To", style: TextStyle(fontSize: 15,),)),
+                        ),
+                        Column(
+                          children: [
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child:Text("Destination", style: TextStyle(fontWeight:FontWeight.bold,fontSize: 18),)
                             ),
-                            child: DropdownButton(
-                              isExpanded: true,
-                              value: selectedDestination,
-                              onChanged: (newValue){
-                                setState(() {
-                                  selectedDestination="$newValue";
-                                });
-                              },
-                              items:Destination.map((destination){
-                                return DropdownMenuItem(
-                                  child: new Text(destination),
-                                  value:destination,
-                                );
-                              }).toList(),
+                            Container(
+                              width: 175,
+                              height: 50,
+                              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2,),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.green, width: 4),
+                                  borderRadius: BorderRadius.circular(25)
+                              ),
+                              child: DropdownButton(
+                                isExpanded: true,
+                                value: selectedDestination,
+                                onChanged: (newValue){
+                                  setState(() {
+                                    selectedDestination="$newValue";
+                                  });
+                                },
+                                items:Destination.map((destination){
+                                  return DropdownMenuItem(
+                                    child: new Text(destination),
+                                    value:destination,
+                                  );
+                                }).toList(),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(25),
@@ -547,4 +553,11 @@ class _MainMenuState extends State<MainMenu> {
         break;
     }
   }
+  // Future sendEmail() async{
+  //   final message = Message()
+  //       ..from = Address(city: 'Karachi', country: 'Pakistan', state: 'Sindh')
+  //       ..recipients = [useremail]
+  //       ..subject = ''
+  //       ..text = '';
+  // }
 }
