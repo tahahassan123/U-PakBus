@@ -10,7 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'dart:math';
-import 'package:flutter_mailer/flutter_mailer.dart';
+//import 'package:flutter_mailer/flutter_mailer.dart';
 
 void main() => runApp(
     MaterialApp(
