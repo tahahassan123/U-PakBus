@@ -427,7 +427,7 @@ class _MainMenuState extends State<MainMenu> {
     try {
       // WidgetsFlutterBinding.ensureInitialized();
       // Stripe.publishableKey = 'pk_test_51NCzkJI3GjRc0k0GRc5SfTIoeaHzyaYirzzindw9IkPdbw7la71lCzcx26PDJw4LPhajCk9zqrjarb2Hhxdq5t0D00QNf1VOpH';
-      int totalamount=((50000*passenger));
+      int totalamount=((150000*passenger));
       String totalamountstring=totalamount.toString();
       paymentIntent = await createPaymentIntent(totalamountstring, 'PKR');
       //Payment Sheet

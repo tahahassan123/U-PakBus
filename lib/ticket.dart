@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'main.dart';
 import 'menu.dart';
 
 class Ticket extends StatefulWidget {
@@ -21,6 +22,51 @@ void main() {
 }
 
 class _TicketState extends State<Ticket> {
+
+  bool isticketused=false;
+  late Timer timer;
+
+  Future<void> checkticketused() async {
+    try {
+      var collectionRef3=await FirebaseFirestore.instance;
+      var cnicinticketsornot = collectionRef3.collection('tickets');
+      await cnicinticketsornot.doc(cnicfromdb).get().then((doc) {
+        isticketused = doc.exists;
+        print("dimagh khrab"+isticketused.toString());
+      });
+    }
+    catch(e) {
+    }
+
+    if(isticketused)
+    {
+      //dispose();
+
+
+    }
+    else {
+      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(
+          builder: (context) =>
+              MainMenu(email: email,
+                  cnicfromdb: cnicfromdb,
+                  namefromdb: namefromdb)), (_) => false);
+
+
+    }
+
+  }
+  @override
+  void initState() {
+    super.initState();
+    checkticketused();
+    timer = Timer.periodic(Duration(seconds: 1), (_) => checkticketused());
+
+  }
+
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
   String email,cnicfromdb,namefromdb,tamount,tdate,tdest,tid,tpassengers,tpickup,tserviceid,tbus,ticketnum;
   String serviceImage = 'images/login31.jpeg';
   _TicketState(this.email,this.cnicfromdb,this.namefromdb,this.tamount,this.tdate,this.tdest,this.tid,this.tpassengers,this.tpickup,this.tserviceid,this.tbus,this.ticketnum);
