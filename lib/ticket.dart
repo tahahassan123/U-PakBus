@@ -8,10 +8,10 @@ import 'login.dart';
 import 'menu.dart';
 
 class Ticket extends StatefulWidget {
-  late var email,cnicfromdb,namefromdb,tamount,tdate,tdest,tid,tpassengers,tpickup,tserviceid,tbus,ticketnum;
-  Ticket({Key? key,@required this.email,@required this.cnicfromdb,@required this.namefromdb,this.tamount,this.tdate,this.tdest,this.tid,this.tpassengers,this.tpickup,this.tserviceid,this.tbus,this.ticketnum}) : super(key: key);
+  late var email,cnicfromdb,namefromdb,tdate,tdest,tpassengers,tpickup,tserviceid,tbus,ticketnum;
+  Ticket({Key? key,@required this.email,@required this.cnicfromdb,@required this.namefromdb,this.tdate,this.tdest,this.tpassengers,this.tpickup,this.tserviceid,this.tbus,this.ticketnum}) : super(key: key);
   @override
-  _TicketState createState() => _TicketState(email,cnicfromdb,namefromdb,tamount,tdate,tdest,tid,tpassengers,tpickup,tserviceid,tbus,ticketnum);
+  _TicketState createState() => _TicketState(email,cnicfromdb,namefromdb,tdate,tdest,tpassengers,tpickup,tserviceid,tbus,ticketnum);
 }
 
 var selectedService;
@@ -21,9 +21,9 @@ void main() {
 }
 
 class _TicketState extends State<Ticket> {
-  String email,cnicfromdb,namefromdb,tamount,tdate,tdest,tid,tpassengers,tpickup,tserviceid,tbus,ticketnum;
+  String email,cnicfromdb,namefromdb,tdate,tdest,tpassengers,tpickup,tserviceid,tbus,ticketnum;
   String serviceImage = 'images/login31.jpeg';
-  _TicketState(this.email,this.cnicfromdb,this.namefromdb,this.tamount,this.tdate,this.tdest,this.tid,this.tpassengers,this.tpickup,this.tserviceid,this.tbus,this.ticketnum);
+  _TicketState(this.email,this.cnicfromdb,this.namefromdb,this.tdate,this.tdest,this.tpassengers,this.tpickup,this.tserviceid,this.tbus,this.ticketnum);
   @override
   Widget build(BuildContext context) {
     if (tserviceid == '1'){

@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class Main extends StatelessWidget{
     ),
   );
 }
-//final navigatorKey = GlobalKey<NavigatorState>();
+
 class Login extends StatefulWidget {
   final VoidCallback onClickSignup;
   const Login({
@@ -145,9 +146,7 @@ class _LoginState extends State<Login> {
                               setState(() {
                                 passwordVisible = !passwordVisible;
                               });
-                              //fourController.clear();
                             },
-                            //icon: const Icon(Icons.clear),
                           ),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30)
@@ -193,6 +192,12 @@ class _LoginState extends State<Login> {
                           email = oneController.text;
                           cnic = twoController.text;
                           password = threeController.text;
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Center(child: CircularProgressIndicator(),);
+                              }
+                          );
                           try {
                             FirebaseAuth.instance.signOut();
                             FirebaseAuth auth = FirebaseAuth.instance;
@@ -279,16 +284,16 @@ class _LoginState extends State<Login> {
                                       DocumentSnapshot snapshot;
                                       var ticketdata=await FirebaseFirestore.instance.collection('tickets').doc(cnicfromdb).get();
                                       snapshot=ticketdata;
-                                      tamount=snapshot.get("amount").toString();
+                                      //tamount=snapshot.get("amount").toString();
                                       tdate=snapshot.get("date").toString();
                                       tdest=snapshot.get("destination").toString();
-                                      tid=snapshot.get("id").toString();
+                                      //tid=snapshot.get("id").toString();
                                       tpassengers=snapshot.get("passengers").toString();
                                       tpickup=snapshot.get("pickup").toString();
                                       tserviceid=snapshot.get("serviceid").toString();
                                       tbus=snapshot.get("busNumber").toString();
                                       ticketnum=snapshot.get("ticketnum").toString();
-                                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Ticket(email:email,cnicfromdb:cnicfromdb,namefromdb:namefromdb,tamount:tamount,tdate:tdate,tdest:tdest,tid:tid,tpickup:tpickup,tpassengers:tpassengers,tserviceid:tserviceid,tbus:tbus,ticketnum: ticketnum,)), (_) => false);
+                                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Ticket(email:email,cnicfromdb:cnicfromdb,namefromdb:namefromdb,tdate:tdate,tdest:tdest,tpickup:tpickup,tpassengers:tpassengers,tserviceid:tserviceid,tbus:tbus,ticketnum: ticketnum,)), (_) => false);
                                     }
                                     else
                                       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MainMenu(email:email,cnicfromdb:cnicfromdb,namefromdb:namefromdb)), (_) => false);
@@ -310,6 +315,7 @@ class _LoginState extends State<Login> {
                             else
                               createsnackbar("something wrong");
                           }
+                          Navigator.of(context).pop();
                         },
                         color: Colors.green,
                         shape: RoundedRectangleBorder(
@@ -382,6 +388,26 @@ class _SignUpState extends State<SignUp> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
+                    // ClipRRect(
+                    //   borderRadius: BorderRadius.circular(20),
+                    //   child: Container(
+                    //     color: Colors.transparent,
+                    //     child: Stack(
+                    //       children: [
+                    //         BackdropFilter(
+                    //             filter: ImageFilter.blur(
+                    //               sigmaX: 4,
+                    //               sigmaY: 4,
+                    //             ),
+                    //           child: Container(),
+                    //         ),
+                    //         Container(
+                    //
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.all(25),
                       child: CircleAvatar(
@@ -501,6 +527,12 @@ class _SignUpState extends State<SignUp> {
                           signupemail = twoController.text;
                           signupcnic = threeController.text;
                           signuppassword = fourController.text;
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return Center(child: CircularProgressIndicator(),);
+                              }
+                          );
                           try {
                             checkingemailbool=false;
                             var checkingemail = FirebaseFirestore.instance.collection('normalusers');
@@ -517,6 +549,7 @@ class _SignUpState extends State<SignUp> {
                                 email: signupemail,
                                 password: signuppassword,
                               );
+                              Navigator.of(context).pop();
                               final signupdb = FirebaseFirestore.instance;
                               final signupdata = { "cnic":signupcnic,"name": signupname};
                               signupdb.collection("normalusers").doc(signupemail).set(signupdata);
