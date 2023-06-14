@@ -480,21 +480,24 @@ class _MainMenuState extends State<MainMenu> {
         Random random = new Random();
         int ticketnum = random.nextInt(9000) + 100;
         String ticketnumstring=ticketnum.toString();
-        final data2 = {"id":id,"name": namefromdb, "passengers":passenger,"date":currentdate ,"email":email,"amount":amount2,"pickup":selectedPickup,"destination":selectedDestination,"serviceid":serviceid.toString(),"busNumber":selectedBus,"ticketnum":ticketnumstring};
+        final data2 = {"name": namefromdb, "passengers":passenger,"date":currentdate ,"email":email,"pickup":selectedPickup,"destination":selectedDestination,"serviceid":serviceid.toString(),"busNumber":selectedBus,"ticketnum":ticketnumstring};
         print(idstring.codeUnits);
         db.collection("tickets").doc(cnicfromdb).set(data2);
+        final data3 = {"transactionid":id,"date":currentdate,"amount":amount2, "serviceid":serviceid.toString()};
+        print(idstring.codeUnits);
+        db.collection("transactions").doc(cnicfromdb).set(data3);
         DocumentSnapshot snapshot;
         var ticketdata=await FirebaseFirestore.instance.collection('tickets').doc(cnicfromdb).get();
         snapshot=ticketdata;
-        var tamount=snapshot.get("amount").toString();
+        //var tamount=snapshot.get("amount").toString();
         var tdate=snapshot.get("date").toString();
         var tdest=snapshot.get("destination").toString();
-        var tid=snapshot.get("id").toString();
+        //var tid=snapshot.get("id").toString();
         var tpassengers=snapshot.get("passengers").toString();
         var tpickup=snapshot.get("pickup").toString();
         var tserviceid=snapshot.get("serviceid").toString();
         var tbus=snapshot.get("busNumber").toString();
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Ticket(email:email,cnicfromdb:cnicfromdb,namefromdb:namefromdb,tamount:tamount,tdate:tdate,tdest:tdest,tid:tid,tpickup:tpickup,tpassengers:tpassengers,tserviceid:tserviceid,tbus:tbus,ticketnum: ticketnumstring)), (_) => false);
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Ticket(email:email,cnicfromdb:cnicfromdb,namefromdb:namefromdb,tdate:tdate,tdest:tdest,tpickup:tpickup,tpassengers:tpassengers,tserviceid:tserviceid,tbus:tbus,ticketnum: ticketnumstring)), (_) => false);
       }).onError((error, stackTrace) {
         print('Error is:--->$error $stackTrace');
       });
