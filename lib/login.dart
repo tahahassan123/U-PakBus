@@ -93,85 +93,109 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
-                    Padding(padding: const EdgeInsets.all(15),
-                      child: TextField(
-                        controller: oneController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: "Enter your Email",
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              oneController.clear();
-                            },
-                            icon: const Icon(Icons.clear),
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(padding: const EdgeInsets.all(15),
-                      child: TextField(
-                        controller: twoController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: "Enter your CNIC",
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              twoController.clear();
-                            },
-                            icon: const Icon(Icons.clear),
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)
-                          ),
-                        ),
-                        keyboardType: TextInputType.number,
-                      ),
-                    ),
-                    Padding(padding: const EdgeInsets.all(15),
-                      child: TextField(
-                        obscureText: passwordVisible,
-                        controller: threeController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: "Enter your Password",
-                          suffixIcon: IconButton(
-                            icon: Icon(passwordVisible? Icons.visibility: Icons.visibility_off),
-                            onPressed: () {
-                              setState(() {
-                                passwordVisible = !passwordVisible;
-                              });
-                            },
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)
-                          ),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: GestureDetector(
-                        child: Text("Forgot Password?", style: TextStyle(fontSize: 12,color: Colors.blue, decoration: TextDecoration.underline),),
-                        onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => ForgotPassword())),
-                      ),
-                    ),
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 100),
-                        child: RichText(
-                          text: TextSpan(
-                            style: TextStyle(color: Colors.grey[900]),
-                            text: 'No account? ',
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Stack(
                             children: [
-                              TextSpan(
-                                recognizer: TapGestureRecognizer()..onTap = widget.onClickSignup,
-                                style: TextStyle(color: Colors.green[700], decoration: TextDecoration.underline),
-                                text: 'Sign Up',
+                              BackdropFilter(
+                                filter: ImageFilter.blur(
+                                  sigmaX: 8.5,
+                                  sigmaY: 8.5,
+                                ),
+                                child: Container(),
+                              ),
+                              Column(
+                                children: [
+                                  Padding(padding: const EdgeInsets.all(15),
+                                    child: TextField(
+                                      controller: oneController,
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        hintText: "Enter your Email",
+                                        suffixIcon: IconButton(
+                                          onPressed: () {
+                                            oneController.clear();
+                                          },
+                                          icon: const Icon(Icons.clear),
+                                        ),
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(30)
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(padding: const EdgeInsets.all(15),
+                                    child: TextField(
+                                      controller: twoController,
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        hintText: "Enter your CNIC",
+                                        suffixIcon: IconButton(
+                                          onPressed: () {
+                                            twoController.clear();
+                                          },
+                                          icon: const Icon(Icons.clear),
+                                        ),
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(30)
+                                        ),
+                                      ),
+                                      keyboardType: TextInputType.number,
+                                    ),
+                                  ),
+                                  Padding(padding: const EdgeInsets.all(15),
+                                    child: TextField(
+                                      obscureText: passwordVisible,
+                                      controller: threeController,
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        hintText: "Enter your Password",
+                                        suffixIcon: IconButton(
+                                          icon: Icon(passwordVisible? Icons.visibility: Icons.visibility_off),
+                                          onPressed: () {
+                                            setState(() {
+                                              passwordVisible = !passwordVisible;
+                                            });
+                                          },
+                                        ),
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(30)
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: GestureDetector(
+                                      child: Text("Forgot Password?", style: TextStyle(fontSize: 14.5,color: Colors.blue[500], decoration: TextDecoration.underline),),
+                                      onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => ForgotPassword())),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 100),
+                                      child: RichText(
+                                        text: TextSpan(
+                                          style: TextStyle(color: Colors.white),
+                                          text: 'No account? ',
+                                          children: [
+                                            TextSpan(
+                                              recognizer: TapGestureRecognizer()..onTap = widget.onClickSignup,
+                                              style: TextStyle(color: Colors.green[600], decoration: TextDecoration.underline),
+                                              text: 'Sign Up',
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -388,26 +412,6 @@ class _SignUpState extends State<SignUp> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                    // ClipRRect(
-                    //   borderRadius: BorderRadius.circular(20),
-                    //   child: Container(
-                    //     color: Colors.transparent,
-                    //     child: Stack(
-                    //       children: [
-                    //         BackdropFilter(
-                    //             filter: ImageFilter.blur(
-                    //               sigmaX: 4,
-                    //               sigmaY: 4,
-                    //             ),
-                    //           child: Container(),
-                    //         ),
-                    //         Container(
-                    //
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ),
                     Padding(
                       padding: const EdgeInsets.all(25),
                       child: CircleAvatar(
@@ -420,107 +424,131 @@ class _SignUpState extends State<SignUp> {
                         ),
                       ),
                     ),
-                    Padding(padding: const EdgeInsets.all(12),
-                      child: TextField(
-                        controller: oneController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: "Enter your Name",
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              oneController.clear();
-                            },
-                            icon: const Icon(Icons.clear),
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(padding: const EdgeInsets.all(12),
-                      child: TextField(
-                        controller: twoController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: "Enter your Email",
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              twoController.clear();
-                            },
-                            icon: const Icon(Icons.clear),
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(padding: const EdgeInsets.all(12),
-                      child: TextField(
-                        controller: threeController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: "Enter your CNIC",
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              threeController.clear();
-                            },
-                            icon: const Icon(Icons.clear),
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)
-                          ),
-                        ),
-                        keyboardType: TextInputType.number,
-                      ),
-                    ),
-                    Padding(padding: const EdgeInsets.all(12),
-                      child: TextField(
-                        obscureText: passwordVisible,
-                        controller: fourController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          hintText: "Enter your Password",
-                          suffixIcon: IconButton(
-                            icon: Icon(passwordVisible? Icons.visibility: Icons.visibility_off),
-                            onPressed: () {
-                              setState(() {
-                                passwordVisible = !passwordVisible;
-                              });
-                              //fourController.clear();
-                            },
-                            //icon: const Icon(Icons.clear),
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30)
-                          ),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 85),
-                        child: RichText(
-                          text: TextSpan(
-                            style: TextStyle(color: Colors.white),
-                            text: 'Have an account? ',
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(30),
+                        child: Container(
+                          color: Colors.transparent,
+                          child: Stack(
                             children: [
-                              TextSpan(
-                                recognizer: TapGestureRecognizer()..onTap = widget.onClickSignup,
-                                style: TextStyle(color: Colors.green[600], decoration: TextDecoration.underline),
-                                text: 'Login',
+                              BackdropFilter(
+                                  filter: ImageFilter.blur(
+                                    sigmaX: 8.5,
+                                    sigmaY: 8.5,
+                                  ),
+                                child: Container(),
+                              ),
+                              Column(
+                                children: [
+                                  Padding(padding: const EdgeInsets.all(12),
+                                    child: TextField(
+                                      controller: oneController,
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        hintText: "Enter your Name",
+                                        suffixIcon: IconButton(
+                                          onPressed: () {
+                                            oneController.clear();
+                                          },
+                                          icon: const Icon(Icons.clear),
+                                        ),
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(30)
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(padding: const EdgeInsets.all(12),
+                                    child: TextField(
+                                      controller: twoController,
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        hintText: "Enter your Email",
+                                        suffixIcon: IconButton(
+                                          onPressed: () {
+                                            twoController.clear();
+                                          },
+                                          icon: const Icon(Icons.clear),
+                                        ),
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(30)
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(padding: const EdgeInsets.all(12),
+                                    child: TextField(
+                                      controller: threeController,
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        hintText: "Enter your CNIC",
+                                        suffixIcon: IconButton(
+                                          onPressed: () {
+                                            threeController.clear();
+                                          },
+                                          icon: const Icon(Icons.clear),
+                                        ),
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(30)
+                                        ),
+                                      ),
+                                      keyboardType: TextInputType.number,
+                                    ),
+                                  ),
+                                  Padding(padding: const EdgeInsets.all(12),
+                                    child: TextField(
+                                      obscureText: passwordVisible,
+                                      controller: fourController,
+                                      decoration: InputDecoration(
+                                        filled: true,
+                                        fillColor: Colors.white,
+                                        hintText: "Enter your Password",
+                                        suffixIcon: IconButton(
+                                          icon: Icon(passwordVisible? Icons.visibility: Icons.visibility_off),
+                                          onPressed: () {
+                                            setState(() {
+                                              passwordVisible = !passwordVisible;
+                                            });
+                                            //fourController.clear();
+                                          },
+                                          //icon: const Icon(Icons.clear),
+                                        ),
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.circular(30)
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 70),
+                                      child: RichText(
+                                        text: TextSpan(
+                                          style: TextStyle(color: Colors.white),
+                                          text: 'Have an account? ',
+                                          children: [
+                                            TextSpan(
+                                              recognizer: TapGestureRecognizer()..onTap = widget.onClickSignup,
+                                              style: TextStyle(color: Colors.green[600], decoration: TextDecoration.underline),
+                                              text: 'Login',
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         ),
                       ),
                     ),
-                    Padding(padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 105),
+                    Padding(padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 105),
                       child: MaterialButton(
                         onPressed: () async {
                           signupname = oneController.text;

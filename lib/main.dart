@@ -289,7 +289,7 @@ class _MainMenuState extends State<MainMenu> {
                           ],
                         ),
                         SizedBox(
-                          width: 20,
+                          width: 30,
                           height: 25,
                           child: Center(child: Text("To", style: TextStyle(fontSize: 15,),)),
                         ),
@@ -370,50 +370,55 @@ class _MainMenuState extends State<MainMenu> {
                         padding: const EdgeInsets.all(10),
                         child: Center(child: Text(error, style: TextStyle(fontSize: 12, color: Colors.red,),)),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          passenger = int.parse(passengerController.text);
-                          if (selectedService != null || selectedBus != null || selectedPickup != null || selectedDestination != null || passenger != 0){
-                            //Navigator.of(context).push(MaterialPageRoute( builder: (context) => HomeScreen2(passenger: passenger,),));
-                            if(selectedService=='Peoples Bus')
-                              serviceid=1;
-                            if(selectedService=='EV Bus')
-                              serviceid=2;
-                            if(selectedService=='Greenline Metro')
-                              serviceid=3;
-                            makePayment();
-                          }//passenger: passenger
-                          else{
-                            if (selectedPickup == selectedDestination){
-                              error = "";
-                              var snackBar = SnackBar(content: Text('Pickup and destination cannot be same!'));
-                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                            }
+                      MaterialButton(
+                          onPressed: () {
+                            passenger = int.parse(passengerController.text);
+                            if (selectedService != null || selectedBus != null || selectedPickup != null || selectedDestination != null || passenger != 0 || selectedPickup != selectedDestination){
+                              //Navigator.of(context).push(MaterialPageRoute( builder: (context) => HomeScreen2(passenger: passenger,),));
+                              if(selectedService=='Peoples Bus')
+                                serviceid=1;
+                              if(selectedService=='EV Bus')
+                                serviceid=2;
+                              if(selectedService=='Greenline Metro')
+                                serviceid=3;
+                              makePayment();
+                            }//passenger: passenger
                             else{
-                              error = "Please complete all fields!";
-                              var snackBar = SnackBar(content: Text('Please complete all fields!'));
-                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              if (selectedPickup == selectedDestination){
+                                ScaffoldMessenger.of(context).showSnackBar( SnackBar( content: Text("Pick up and Destination cannot be same!"), duration: Duration(milliseconds: 1700), ), );
+                              }
+                              else{
+                                ScaffoldMessenger.of(context).showSnackBar( SnackBar( content: Text("Please complete all fields!"), duration: Duration(milliseconds: 1700), ), );
+                              }
                             }
-                          }
-                        },
-                        child: SizedBox(
-                          width: 100,
-                          height: 50,
-                          child: Column(
-                            children: [
-                              Stack(
-                                children: [
-                                  Image.asset('images/button2.png'),
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 6),
-                                    child: Center(child: Text('Confirm', style: TextStyle(color: Colors.white, fontSize: 15),)),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+                          },
+                        color: Colors.green[700],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)
                         ),
+                        child: const Text('Confirm', style: TextStyle(fontSize: 14, color: Colors.white),),
                       ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //   },
+                      //   child: SizedBox(
+                      //     width: 100,
+                      //     height: 50,
+                      //     child: Column(
+                      //       children: [
+                      //         Stack(
+                      //           children: [
+                      //             Image.asset('images/button2.png'),
+                      //             Padding(
+                      //               padding: const EdgeInsets.only(top: 6),
+                      //               child: Center(child: Text('Confirm', style: TextStyle(color: Colors.white, fontSize: 15),)),
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ]
@@ -424,10 +429,15 @@ class _MainMenuState extends State<MainMenu> {
     );
   }
   Future<void> makePayment() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Center(child: CircularProgressIndicator(),),
+    );
     try {
       // WidgetsFlutterBinding.ensureInitialized();
       // Stripe.publishableKey = 'pk_test_51NCzkJI3GjRc0k0GRc5SfTIoeaHzyaYirzzindw9IkPdbw7la71lCzcx26PDJw4LPhajCk9zqrjarb2Hhxdq5t0D00QNf1VOpH';
-      int totalamount=((50000*passenger));
+      int totalamount=((150000*passenger));
       String totalamountstring=totalamount.toString();
       paymentIntent = await createPaymentIntent(totalamountstring, 'PKR');
       //Payment Sheet
@@ -445,6 +455,7 @@ class _MainMenuState extends State<MainMenu> {
     }
   }
   displayPaymentSheet() async {
+    Navigator.of(context).pop();
     try {
       await Stripe.instance.presentPaymentSheet(
       ).then((value) async {
