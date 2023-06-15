@@ -9,10 +9,11 @@ import 'package:pakistanbusapp/ticket.dart';
 import 'mainDriver.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'API.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Stripe.publishableKey = 'pk_test_51NCzkJI3GjRc0k0GRc5SfTIoeaHzyaYirzzindw9IkPdbw7la71lCzcx26PDJw4LPhajCk9zqrjarb2Hhxdq5t0D00QNf1VOpH';
+  Stripe.publishableKey = stripeAPI;
   await Firebase.initializeApp(
   );
   collectionref4=await FirebaseFirestore.instance;
@@ -513,9 +514,7 @@ class _SignUpState extends State<SignUp> {
                                             setState(() {
                                               passwordVisible = !passwordVisible;
                                             });
-                                            //fourController.clear();
                                           },
-                                          //icon: const Icon(Icons.clear),
                                         ),
                                         border: OutlineInputBorder(
                                             borderRadius: BorderRadius.circular(30)

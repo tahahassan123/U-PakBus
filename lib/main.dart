@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'dart:math';
+import 'API.dart';
 //import 'package:flutter_mailer/flutter_mailer.dart';
 
 void main() => runApp(
@@ -121,13 +122,14 @@ class _MainMenuState extends State<MainMenu> {
               fit: BoxFit.cover, colorFilter: new ColorFilter.mode(Colors.green.withOpacity(0.3), BlendMode.dstATop),
             ),
           ),
+          height: 700,
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(10),
             reverse: false,
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  SizedBox(height: 23,),
+                  SizedBox(height: 23),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
@@ -373,7 +375,7 @@ class _MainMenuState extends State<MainMenu> {
                       MaterialButton(
                           onPressed: () {
                             passenger = int.parse(passengerController.text);
-                            if (selectedService != null || selectedBus != null || selectedPickup != null || selectedDestination != null || passenger != 0 || selectedPickup != selectedDestination){
+                            if (selectedService != null && selectedBus != null && selectedPickup != null && selectedDestination != null && passenger != 0 && selectedPickup != selectedDestination){
                               //Navigator.of(context).push(MaterialPageRoute( builder: (context) => HomeScreen2(passenger: passenger,),));
                               if(selectedService=='Peoples Bus')
                                 serviceid=1;
@@ -398,27 +400,6 @@ class _MainMenuState extends State<MainMenu> {
                         ),
                         child: const Text('Confirm', style: TextStyle(fontSize: 14, color: Colors.white),),
                       ),
-                      // GestureDetector(
-                      //   onTap: () {
-                      //   },
-                      //   child: SizedBox(
-                      //     width: 100,
-                      //     height: 50,
-                      //     child: Column(
-                      //       children: [
-                      //         Stack(
-                      //           children: [
-                      //             Image.asset('images/button2.png'),
-                      //             Padding(
-                      //               padding: const EdgeInsets.only(top: 6),
-                      //               child: Center(child: Text('Confirm', style: TextStyle(color: Colors.white, fontSize: 15),)),
-                      //             ),
-                      //           ],
-                      //         ),
-                      //       ],
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ]
@@ -436,7 +417,6 @@ class _MainMenuState extends State<MainMenu> {
     );
     try {
       // WidgetsFlutterBinding.ensureInitialized();
-      // Stripe.publishableKey = 'pk_test_51NCzkJI3GjRc0k0GRc5SfTIoeaHzyaYirzzindw9IkPdbw7la71lCzcx26PDJw4LPhajCk9zqrjarb2Hhxdq5t0D00QNf1VOpH';
       int totalamount=((150000*passenger));
       String totalamountstring=totalamount.toString();
       paymentIntent = await createPaymentIntent(totalamountstring, 'PKR');
@@ -537,7 +517,7 @@ class _MainMenuState extends State<MainMenu> {
       var response = await http.post(
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         headers: {
-          'Authorization': 'Bearer sk_test_51NCzkJI3GjRc0k0GX7SaP3JV30KCmrCpKWxGWitExO0yAh8LShdMk8cisb6uD7sncqdNMSvuZ66RMZoWh0uCsz3900QsFbIT17',
+          'Authorization': stripeAuth,
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: body,
