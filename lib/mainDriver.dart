@@ -113,7 +113,7 @@ class _DriverState extends State<Driver> {
                                                             crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: [
                                                               Padding(
-                                                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                                                                padding: const EdgeInsets.only(top: 30, bottom: 12, left: 12, right: 12),
                                                                 child: Row(
                                                                     children: [
                                                                       Text('Holder: ',
