@@ -16,27 +16,46 @@ import 'API.dart';
 void main() => runApp(
     MaterialApp(
       title: "UserPage",
-      home: MainMenu(),
+      home: MainMenu2(),
     ));
-class MainMenu extends StatefulWidget {
+class MainMenu2 extends StatefulWidget {
   late var email,cnicfromdb,namefromdb;
-  MainMenu({Key? key,@required this.email,@required this.cnicfromdb,@required this.namefromdb}) : super(key: key);
+  MainMenu2({Key? key,@required this.email,@required this.cnicfromdb,@required this.namefromdb}) : super(key: key);
   @override
-  _MainMenuState createState() => _MainMenuState(email,cnicfromdb,namefromdb);
+  _MainMenu2State createState() => _MainMenu2State(email,cnicfromdb,namefromdb);
 }
 
 var data,serviceid;
-class _MainMenuState extends State<MainMenu> {
+class _MainMenu2State extends State<MainMenu2> {
   String email,cnicfromdb,namefromdb;
-  _MainMenuState(this.email,this.cnicfromdb,this.namefromdb);
+  _MainMenu2State(this.email,this.cnicfromdb,this.namefromdb);
   Map<String, dynamic>? paymentIntent;
   final passengerController = TextEditingController();
   var passenger = 0;
   var error = '';
-  String selectedService= 'Select Service';
+  List Service = [];
+  Map<String, dynamic> service={'Select Service': '0'};
+  Map<String, dynamic> bus= {'Select Bus': 'Select Service'};
+  Future<void> getDropdowndata() async {
+    QuerySnapshot snapshot01 = await FirebaseFirestore.instance.collection('service').get();
+    var serviceMap = snapshot01.docs;
+    QuerySnapshot snapshot02 = await FirebaseFirestore.instance.collection('busNumber').get();
+    var busMap = snapshot02.docs;
+    QuerySnapshot snapshot03 = await FirebaseFirestore.instance.collection('stations').get();
+    var pickupMap = snapshot03.docs;
+    var destination = snapshot03.docs;
+    for(int i=0; i < snapshot01.docs.length; i++){
+      //print(serviceMap['serviceid']);
+      service={serviceMap[i]['servicename'].toString():serviceMap[i]['serviceid'].toString()};
+      for(int i=0; i < snapshot02.docs.length; i++){
+        bus={busMap[i]['busNumber'].toString():serviceMap[i]['serviceid'].toString()};
+      }
+    }
+  }
+  String selectedService= '';
   String busImage = 'images/UPakBuslogo.png';
-  final service={'Select Service': 0,'Peoples Bus': 1, 'EV Bus': 2,'Greenline Metro': 3};
-  List Service=[];
+  //final service={'Select Service': 0,'Peoples Bus': 1, 'EV Bus': 2,'Greenline Metro': 3};
+  //List Service=[];
   ServiceDropDown(){
     service.forEach((key, value) {
       Service.add(key);
@@ -45,7 +64,7 @@ class _MainMenuState extends State<MainMenu> {
   String selectedBus= '';
   String routeImage = 'images/pakistan.jpg';
   double routeHeight = 250;
-  final bus={'R-1': 1, 'R-2': 1,'R-3': 1, 'R-4': 1, 'EV-1': 2, 'EV-2': 2, 'BRT': 3};
+
   List Bus=[];
   BusDropDown(serviceID){
     bus.forEach((key, value) {
@@ -122,7 +141,7 @@ class _MainMenuState extends State<MainMenu> {
               fit: BoxFit.cover, colorFilter: new ColorFilter.mode(Colors.green.withOpacity(0.3), BlendMode.dstATop),
             ),
           ),
-          height: 700,
+          height: 1000,
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(10),
             reverse: false,
@@ -291,7 +310,7 @@ class _MainMenuState extends State<MainMenu> {
                           ],
                         ),
                         SizedBox(
-                          width: 30,
+                          width: 26,
                           height: 25,
                           child: Center(child: Text("To", style: TextStyle(fontSize: 15,),)),
                         ),
@@ -387,10 +406,10 @@ class _MainMenuState extends State<MainMenu> {
                           }//passenger: passenger
                           else{
                             if (selectedPickup == selectedDestination){
-                              ScaffoldMessenger.of(context).showSnackBar( SnackBar( content: Text("Pick up and Destination cannot be same!"), duration: Duration(milliseconds: 1700), ), );
+                              ScaffoldMessenger.of(context).showSnackBar( SnackBar( content: Text("Pick up and Destination cannot be same!"), duration: Duration(milliseconds: 2000), ), );
                             }
                             else{
-                              ScaffoldMessenger.of(context).showSnackBar( SnackBar( content: Text("Please complete all fields!"), duration: Duration(milliseconds: 1700), ), );
+                              ScaffoldMessenger.of(context).showSnackBar( SnackBar( content: Text("Please complete all fields!"), duration: Duration(milliseconds: 2000), ), );
                             }
                           }
                         },
@@ -480,16 +499,14 @@ class _MainMenuState extends State<MainMenu> {
         DocumentSnapshot snapshot;
         var ticketdata=await FirebaseFirestore.instance.collection('tickets').doc(cnicfromdb).get();
         snapshot=ticketdata;
-        //var tamount=snapshot.get("amount").toString();
         var tdate=snapshot.get("date").toString();
         var tdest=snapshot.get("destination").toString();
-        //var tid=snapshot.get("id").toString();
         var tpassengers=snapshot.get("passengers").toString();
         var tpickup=snapshot.get("pickup").toString();
         var tserviceid=snapshot.get("serviceid").toString();
         var tbus=snapshot.get("busNumber").toString();
-        var transactiondata=await FirebaseFirestore.instance.collection('transactions').doc(cnicfromdb).get();
         DocumentSnapshot snapshot2;
+        var transactiondata=await FirebaseFirestore.instance.collection('transactions').doc(cnicfromdb).get();
         snapshot2=transactiondata;
         var tid=snapshot2.get("transactionid").toString();
         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Ticket(email:email,cnicfromdb:cnicfromdb,namefromdb:namefromdb,tdate:tdate,tid:tid,tdest:tdest,tpickup:tpickup,tpassengers:tpassengers,tserviceid:tserviceid,tbus:tbus,ticketnum: ticketnumstring)), (_) => false);

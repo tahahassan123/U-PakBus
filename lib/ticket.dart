@@ -9,10 +9,10 @@ import 'menu.dart';
 import 'main.dart';
 
 class Ticket extends StatefulWidget {
-  late var email,cnicfromdb,namefromdb,tdate,tdest,tpassengers,tpickup,tserviceid,tbus,ticketnum;
-  Ticket({Key? key,@required this.email,@required this.cnicfromdb,@required this.namefromdb,this.tdate,this.tdest,this.tpassengers,this.tpickup,this.tserviceid,this.tbus,this.ticketnum}) : super(key: key);
+  late var tid,email,cnicfromdb,namefromdb,tdate,tdest,tpassengers,tpickup,tserviceid,tbus,ticketnum;
+  Ticket({Key? key,@required this.tid,@required this.email,@required this.cnicfromdb,@required this.namefromdb,this.tdate,this.tdest,this.tpassengers,this.tpickup,this.tserviceid,this.tbus,this.ticketnum}) : super(key: key);
   @override
-  _TicketState createState() => _TicketState(email,cnicfromdb,namefromdb,tdate,tdest,tpassengers,tpickup,tserviceid,tbus,ticketnum);
+  _TicketState createState() => _TicketState(tid,email,cnicfromdb,namefromdb,tdate,tdest,tpassengers,tpickup,tserviceid,tbus,ticketnum);
 }
 
 var selectedService;
@@ -30,7 +30,7 @@ class _TicketState extends State<Ticket> {
       var cnicinticketsornot = collectionRef3.collection('tickets');
       await cnicinticketsornot.doc(cnicfromdb).get().then((doc) {
         isticketused = doc.exists;
-        print("dimagh khrab"+isticketused.toString());
+        print("Used:"+isticketused.toString());
       });
     }
     catch(e) {
@@ -56,9 +56,9 @@ class _TicketState extends State<Ticket> {
     timer.cancel();
     super.dispose();
   }
-  String email,cnicfromdb,namefromdb,tdate,tdest,tpassengers,tpickup,tserviceid,tbus,ticketnum;
+  String tid,email,cnicfromdb,namefromdb,tdate,tdest,tpassengers,tpickup,tserviceid,tbus,ticketnum;
   String serviceImage = 'images/login31.jpeg';
-  _TicketState(this.email,this.cnicfromdb,this.namefromdb,this.tdate,this.tdest,this.tpassengers,this.tpickup,this.tserviceid,this.tbus,this.ticketnum);
+  _TicketState(this.tid,this.email,this.cnicfromdb,this.namefromdb,this.tdate,this.tdest,this.tpassengers,this.tpickup,this.tserviceid,this.tbus,this.ticketnum);
   @override
   Widget build(BuildContext context) {
     if (tserviceid == '1'){
@@ -94,7 +94,7 @@ class _TicketState extends State<Ticket> {
               fit: BoxFit.cover, colorFilter: new ColorFilter.mode(Colors.black.withOpacity(0.75), BlendMode.dstATop),
             ),
           ),
-          height: 600,
+          height: 1000,
           child: Center(
             child: SingleChildScrollView(
               child: Column(
@@ -120,13 +120,13 @@ class _TicketState extends State<Ticket> {
                           child: ExpansionTile(
                             children: [
                               Container(
-                                height: 500,
+                                height: 600,
                                 child: SingleChildScrollView(
                                   child: Column(
                                     children: [
                                       Container(
                                         width: 500,
-                                        height: 500,
+                                        height: 600,
                                         child: SingleChildScrollView(
                                           child: Column(
                                             children: [
@@ -138,14 +138,14 @@ class _TicketState extends State<Ticket> {
                                                     ),
                                                     Container(
                                                       width: 500,
-                                                      height: 500,
+                                                      height: 600,
                                                       child: SingleChildScrollView(
                                                         scrollDirection: Axis.horizontal,
                                                         child: Column(
                                                           crossAxisAlignment: CrossAxisAlignment.start,
                                                           children: [
                                                             Padding(
-                                                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                                                              padding: const EdgeInsets.only(top: 30, bottom: 12, left: 12, right: 12),
                                                               child: Row(
                                                                   children: [
                                                                     Text('Holder: ',
@@ -230,6 +230,19 @@ class _TicketState extends State<Ticket> {
                                                                       style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
                                                                     ),
                                                                     Text( tbus,
+                                                                      style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
+                                                                    ),
+                                                                  ]
+                                                              ),
+                                                            ),
+                                                            Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
+                                                              child: Row(
+                                                                  children: [
+                                                                    Text('Payment ID: ',
+                                                                      style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                                                                    ),
+                                                                    Text( tid,
                                                                       style: TextStyle(fontSize: 16, fontFamily: 'killedInk', fontWeight: FontWeight.bold),
                                                                     ),
                                                                   ]

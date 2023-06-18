@@ -309,16 +309,18 @@ class _LoginState extends State<Login> {
                                       DocumentSnapshot snapshot;
                                       var ticketdata=await FirebaseFirestore.instance.collection('tickets').doc(cnicfromdb).get();
                                       snapshot=ticketdata;
-                                      //tamount=snapshot.get("amount").toString();
                                       tdate=snapshot.get("date").toString();
                                       tdest=snapshot.get("destination").toString();
-                                      //tid=snapshot.get("id").toString();
                                       tpassengers=snapshot.get("passengers").toString();
                                       tpickup=snapshot.get("pickup").toString();
                                       tserviceid=snapshot.get("serviceid").toString();
                                       tbus=snapshot.get("busNumber").toString();
                                       ticketnum=snapshot.get("ticketnum").toString();
-                                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Ticket(email:email,cnicfromdb:cnicfromdb,namefromdb:namefromdb,tdate:tdate,tdest:tdest,tpickup:tpickup,tpassengers:tpassengers,tserviceid:tserviceid,tbus:tbus,ticketnum: ticketnum,)), (_) => false);
+                                      DocumentSnapshot snapshot2;
+                                      var transactiondata=await FirebaseFirestore.instance.collection('transactions').doc(cnicfromdb).get();
+                                      snapshot2=transactiondata;
+                                      tid=snapshot2.get("transactionid").toString();
+                                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => Ticket(email:email,cnicfromdb:cnicfromdb,tid:tid,namefromdb:namefromdb,tdate:tdate,tdest:tdest,tpickup:tpickup,tpassengers:tpassengers,tserviceid:tserviceid,tbus:tbus,ticketnum: ticketnum,)), (_) => false);
                                     }
                                     else
                                       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MainMenu(email:email,cnicfromdb:cnicfromdb,namefromdb:namefromdb)), (_) => false);

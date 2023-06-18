@@ -101,14 +101,16 @@ class _DriverState extends State<Driver> {
                                                   children: [
                                                     Container(
                                                       width: 450,
-                                                      height: 420,
+                                                      height: 500,
                                                       child: Stack(children: [
                                                         Image.asset('images/ticket2.jpg',
                                                           fit: BoxFit.cover,
                                                           //opacity: const AlwaysStoppedAnimation(.8),
                                                         ),
                                                         SingleChildScrollView(
+                                                          scrollDirection: Axis.horizontal,
                                                           child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
                                                             children: [
                                                               Padding(
                                                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
@@ -240,19 +242,24 @@ class _DriverState extends State<Driver> {
                                                                       ),
                                                                     ]),
                                                               ),
-                                                              MaterialButton(
-                                                                onPressed: () async {
-                                                                  setUsed(snapshot.data!.docs[index].id);
-                                                                },
-                                                                color: Colors.red,
-                                                                shape: RoundedRectangleBorder(
-                                                                  borderRadius: BorderRadius.circular(15),
-                                                                  //clipBehaviour: Clip.antiAliasWithSaveLayer,
-                                                                ),
-                                                                child: const Text('Set Used',
-                                                                    style: TextStyle(
-                                                                        fontSize: 18,
-                                                                        color: Colors.white)
+                                                              Padding(
+                                                                padding: const EdgeInsets.only(left: 20),
+                                                                child: Center(
+                                                                  child: MaterialButton(
+                                                                    onPressed: () async {
+                                                                      setUsed(snapshot.data!.docs[index].id);
+                                                                    },
+                                                                    color: Colors.red,
+                                                                    shape: RoundedRectangleBorder(
+                                                                      borderRadius: BorderRadius.circular(15),
+                                                                      //clipBehaviour: Clip.antiAliasWithSaveLayer,
+                                                                    ),
+                                                                    child: const Text('Set Used',
+                                                                        style: TextStyle(
+                                                                            fontSize: 18,
+                                                                            color: Colors.white)
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ],
